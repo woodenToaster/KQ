@@ -13,12 +13,22 @@ int main(int argc, char** argv) {
   
   SDL_Init(SDL_INIT_VIDEO);
 
-  SDL_Window* window = SDL_CreateWindow("Hi", 0,0,200,100,0);
-  
-  if(!window) {
-    std::cout << "Whoops!" << '\n';
-  }                    
+  SDL_Window* window;
+  SDL_Surface* surface;
 
+  window = SDL_CreateWindow(
+    "Kirp's Quest",
+    SDL_WINDOWPOS_CENTERED,
+    SDL_WINDOWPOS_CENTERED,
+    320,
+    240,
+    0
+  );
+  
+  surface = SDL_GetWindowSurface(window);
+  SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, 0, 0, 0));
+  SDL_UpdateWindowSurface(window);
+  
   SDL_Event event;
 
   bool quit = false;
