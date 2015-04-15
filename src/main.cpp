@@ -8,6 +8,21 @@ bool isWindowEvent(SDL_Event* event);
 bool isWindowCloseEvent(SDL_Event* event);
 bool isKeyboardEvent(SDL_Event* event);
 bool keyPressedIsEscape(SDL_Event* event);
+bool inputDetected(SDL_Event* event);
+void update(
+  SDL_Window* window, 
+  SDL_Surface* surface, 
+  SDL_Surface* hero,
+  SDL_Rect* dest
+);
+void updateDestination(SDL_Rect* dest);
+void updateScreen(
+  SDL_Window* window, 
+  SDL_Surface* surface, 
+  SDL_Surface* hero,
+  SDL_Rect* dest
+);
+
 
 int main(int argc, char** argv) {
   
@@ -26,9 +41,17 @@ int main(int argc, char** argv) {
   );
   
   surface = SDL_GetWindowSurface(window);
-  SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, 0, 0, 0));
-  SDL_UpdateWindowSurface(window);
   
+  SDL_Surface* hero = SDL_CreateRGBSurface(0, 32, 32, 32, 0, 0, 0, 0);
+  
+  SDL_FillRect(hero, NULL, SDL_MapRGB(hero->format, 0, 255, 0));
+
+  SDL_Rect dest{0,0,32,32};
+
+  SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, 0, 0, 0));
+  SDL_BlitSurface(hero, NULL, surface, &dest);
+  SDL_UpdateWindowSurface(window);
+
   SDL_Event event;
 
   bool quit = false;
@@ -36,7 +59,16 @@ int main(int argc, char** argv) {
   while(!quit) {
     if(SDL_PollEvent(&event)) 
       quit = shouldClose(&event);
+
+    
+
+    if(inputDetected(&event)) 
+      update(window, surface, hero, &dest);
+
+    SDL_Delay(10);
   }
+
+  SDL_FreeSurface(hero);
 
   SDL_DestroyWindow(window);
 
@@ -71,4 +103,48 @@ bool isKeyboardEvent(SDL_Event* event) {
 
 bool keyPressedIsEscape(SDL_Event* event) {
   return event->key.keysym.sym == SDLK_ESCAPE;
+}
+
+bool inputDetected(SDL_Event* event) {
+  if(SDL_PollEvent(event))
+    return event->type == SDL_KEYDOWN;
+  return false;
+}
+
+void update(
+  SDL_Window* window, 
+  SDL_Surface* surface, 
+  SDL_Surface* hero,
+  SDL_Rect* dest) {
+
+  updateDestination(dest);
+  updateScreen(window, surface, hero, dest);
+}
+
+void updateDestination(SDL_Rect* dest) {
+  
+  const Uint8* state = SDL_GetKeyboardState(NULL);
+
+  if(state[SDL_SCANCODE_UP])
+      dest->y -= 1;
+      
+  if(state[SDL_SCANCODE_DOWN])
+    dest->y += 1;
+    
+  if(state[SDL_SCANCODE_LEFT])
+    dest->x -= 1;
+    
+  if(state[SDL_SCANCODE_RIGHT])
+    dest->x += 1;
+}
+
+void updateScreen(
+  SDL_Window* window, 
+  SDL_Surface* surface, 
+  SDL_Surface* hero,
+  SDL_Rect* dest) {
+
+  SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, 0, 0, 0));
+  SDL_BlitSurface(hero, NULL, surface, dest);
+  SDL_UpdateWindowSurface(window);
 }
