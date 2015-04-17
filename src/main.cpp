@@ -4,6 +4,7 @@
 
 const int SCREEN_WIDTH = 320;
 const int SCREEN_HEIGHT = 240;
+const int TILE_SIZE = 8;
 
 struct tile {
   SDL_Surface* surface;
@@ -59,8 +60,8 @@ int main(int argc, char** argv) {
     "Kirp's Quest",
     SDL_WINDOWPOS_CENTERED,
     SDL_WINDOWPOS_CENTERED,
-    320,
-    240,
+    SCREEN_WIDTH,
+    SCREEN_HEIGHT,
     0
   );
   
@@ -189,13 +190,13 @@ bool canMoveRight(SDL_Rect* dest, SDL_Surface* surface) {
 
 void makeTiles() {
   //TODO: potential memory leak.  Use std::shared_ptr
-  SDL_Surface* grassSurface = SDL_CreateRGBSurface(0, 8, 8, 32, 0, 0, 0, 0);
+  SDL_Surface* grassSurface = SDL_CreateRGBSurface(0, TILE_SIZE, TILE_SIZE, 32, 0, 0, 0, 0);
 
-  for(int row = 0; row < (SCREEN_WIDTH / 8.0); ++row) {
-    for(int column = 0; column <  (SCREEN_HEIGHT / 8.0); ++column) {
+  for(int row = 0; row < (SCREEN_WIDTH / TILE_SIZE); ++row) {
+    for(int column = 0; column <  (SCREEN_HEIGHT / TILE_SIZE); ++column) {
       tile t;
       t.surface = grassSurface;
-      t.dest = new SDL_Rect{8 * row, 8 * column, 8, 8};
+      t.dest = new SDL_Rect{TILE_SIZE * row, TILE_SIZE * column, TILE_SIZE, TILE_SIZE};
       tiles.push_back(t);
     }
   }
