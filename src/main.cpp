@@ -8,7 +8,7 @@ bool isWindowEvent(SDL_Event* event);
 bool isWindowCloseEvent(SDL_Event* event);
 bool isKeyboardEvent(SDL_Event* event);
 bool keyPressedIsEscape(SDL_Event* event);
-bool inputDetected(SDL_Event* event);
+bool inputDetected();
 void update(
   SDL_Window* window, 
   SDL_Surface* surface, 
@@ -22,7 +22,6 @@ void updateScreen(
   SDL_Surface* hero,
   SDL_Rect* dest
 );
-
 
 int main(int argc, char** argv) {
   
@@ -59,11 +58,10 @@ int main(int argc, char** argv) {
   while(!quit) {
     if(SDL_PollEvent(&event)) 
       quit = shouldClose(&event);
-
     
-
-    if(inputDetected(&event)) 
-      update(window, surface, hero, &dest);
+    //TODO(Chris): Currently updating even when nothing changes.
+    //We only want to update when something on the screen has changed.
+    update(window, surface, hero, &dest);
 
     SDL_Delay(10);
   }
@@ -105,12 +103,6 @@ bool keyPressedIsEscape(SDL_Event* event) {
   return event->key.keysym.sym == SDLK_ESCAPE;
 }
 
-bool inputDetected(SDL_Event* event) {
-  if(SDL_PollEvent(event))
-    return event->type == SDL_KEYDOWN;
-  return false;
-}
-
 void update(
   SDL_Window* window, 
   SDL_Surface* surface, 
@@ -125,16 +117,16 @@ void updateDestination(SDL_Rect* dest) {
   
   const Uint8* state = SDL_GetKeyboardState(NULL);
 
-  if(state[SDL_SCANCODE_UP])
-      dest->y -= 1;
-      
-  if(state[SDL_SCANCODE_DOWN])
+  if(state[SDL_SCANCODE_UP]) 
+    dest->y -= 1;
+    
+  if(state[SDL_SCANCODE_DOWN]) 
     dest->y += 1;
     
-  if(state[SDL_SCANCODE_LEFT])
+  if(state[SDL_SCANCODE_LEFT]) 
     dest->x -= 1;
     
-  if(state[SDL_SCANCODE_RIGHT])
+  if(state[SDL_SCANCODE_RIGHT]) 
     dest->x += 1;
 }
 
