@@ -1,5 +1,14 @@
 #include <iostream>
+#include <vector>
 #include "SDL.h"
+
+const int SCREEN_WIDTH = 320;
+const int SCREEN_HEIGHT = 240;
+
+struct tile {
+  SDL_Surface* surface;
+  SDL_Rect* dest;
+};
 
 bool shouldClose(SDL_Event* event);
 bool windowCloseClicked(SDL_Event* event);
@@ -9,6 +18,7 @@ bool isWindowCloseEvent(SDL_Event* event);
 bool isKeyboardEvent(SDL_Event* event);
 bool keyPressedIsEscape(SDL_Event* event);
 bool inputDetected();
+
 void update(
   SDL_Window* window, 
   SDL_Surface* surface, 
@@ -22,10 +32,19 @@ void updateScreen(
   SDL_Surface* hero,
   SDL_Rect* dest
 );
+
 bool canMoveUp(SDL_Rect* dest, SDL_Surface* surface);
 bool canMoveDown(SDL_Rect* dest, SDL_Surface* surface);
 bool canMoveLeft(SDL_Rect* dest, SDL_Surface* surface);
 bool canMoveRight(SDL_Rect* dest, SDL_Surface* surface);
+
+void makeTiles();
+void drawTiles(SDL_Surface* surface);
+void drawTile(SDL_Surface* surface, tile* t);
+
+
+
+std::vector<tile> tiles;
 
 int main(int argc, char** argv) {
   
@@ -33,6 +52,8 @@ int main(int argc, char** argv) {
 
   SDL_Window* window;
   SDL_Surface* surface;
+
+  
 
   window = SDL_CreateWindow(
     "Kirp's Quest",
@@ -47,13 +68,16 @@ int main(int argc, char** argv) {
   
   SDL_Surface* hero = SDL_CreateRGBSurface(0, 32, 32, 32, 0, 0, 0, 0);
   
-  SDL_FillRect(hero, NULL, SDL_MapRGB(hero->format, 0, 255, 0));
+  SDL_FillRect(hero, NULL, SDL_MapRGB(hero->format, 0, 0, 255));
 
   SDL_Rect dest{0,0,32,32};
 
   SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, 0, 0, 0));
   SDL_BlitSurface(hero, NULL, surface, &dest);
   SDL_UpdateWindowSurface(window);
+
+  makeTiles();
+  drawTiles(surface);
 
   SDL_Event event;
 
@@ -72,6 +96,8 @@ int main(int argc, char** argv) {
 
   SDL_FreeSurface(hero);
 
+  //TODO: Manage resources properly
+  SDL_FreeSurface(tiles[0].surface);
   SDL_DestroyWindow(window);
 
   SDL_Quit();
@@ -140,7 +166,7 @@ void updateScreen(
   SDL_Surface* hero,
   SDL_Rect* dest) {
 
-  SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, 0, 0, 0));
+  drawTiles(surface);
   SDL_BlitSurface(hero, NULL, surface, dest);
   SDL_UpdateWindowSurface(window);
 }
@@ -159,4 +185,29 @@ bool canMoveLeft(SDL_Rect* dest, SDL_Surface* surface) {
 
 bool canMoveRight(SDL_Rect* dest, SDL_Surface* surface) {
   return (dest->x + dest->w) < (surface->clip_rect.x + surface->clip_rect.w);
+}
+
+void makeTiles() {
+  //TODO: potential memory leak.  Use std::shared_ptr
+  SDL_Surface* grassSurface = SDL_CreateRGBSurface(0, 8, 8, 32, 0, 0, 0, 0);
+
+  for(int row = 0; row < (SCREEN_WIDTH / 8.0); ++row) {
+    for(int column = 0; column <  (SCREEN_HEIGHT / 8.0); ++column) {
+      tile t;
+      t.surface = grassSurface;
+      t.dest = new SDL_Rect{8 * row, 8 * column, 8, 8};
+      tiles.push_back(t);
+    }
+  }
+}
+
+void drawTiles(SDL_Surface* surface) {
+  for(tile t : tiles) {
+    drawTile(surface, &t);
+  }
+}
+
+void drawTile(SDL_Surface* surface, tile* t) {
+  SDL_FillRect(t->surface, t->dest, SDL_MapRGB(surface->format, 0, 255, 0));
+  SDL_BlitSurface(t->surface, NULL, surface, t->dest);
 }
