@@ -15,13 +15,17 @@ void update(
   SDL_Surface* hero,
   SDL_Rect* dest
 );
-void updateDestination(SDL_Rect* dest);
+void updateDestination(SDL_Rect* dest, SDL_Surface* surface);
 void updateScreen(
   SDL_Window* window, 
   SDL_Surface* surface, 
   SDL_Surface* hero,
   SDL_Rect* dest
 );
+bool canMoveUp(SDL_Rect* dest, SDL_Surface* surface);
+bool canMoveDown(SDL_Rect* dest, SDL_Surface* surface);
+bool canMoveLeft(SDL_Rect* dest, SDL_Surface* surface);
+bool canMoveRight(SDL_Rect* dest, SDL_Surface* surface);
 
 int main(int argc, char** argv) {
   
@@ -109,24 +113,24 @@ void update(
   SDL_Surface* hero,
   SDL_Rect* dest) {
 
-  updateDestination(dest);
+  updateDestination(dest, surface);
   updateScreen(window, surface, hero, dest);
 }
 
-void updateDestination(SDL_Rect* dest) {
+void updateDestination(SDL_Rect* dest, SDL_Surface* surface) {
   
   const Uint8* state = SDL_GetKeyboardState(NULL);
 
-  if(state[SDL_SCANCODE_UP]) 
+  if(state[SDL_SCANCODE_UP] && canMoveUp(dest, surface)) 
     dest->y -= 1;
     
-  if(state[SDL_SCANCODE_DOWN]) 
+  if(state[SDL_SCANCODE_DOWN] && canMoveDown(dest, surface)) 
     dest->y += 1;
     
-  if(state[SDL_SCANCODE_LEFT]) 
+  if(state[SDL_SCANCODE_LEFT] && canMoveLeft(dest, surface)) 
     dest->x -= 1;
     
-  if(state[SDL_SCANCODE_RIGHT]) 
+  if(state[SDL_SCANCODE_RIGHT] && canMoveRight(dest, surface)) 
     dest->x += 1;
 }
 
@@ -139,4 +143,20 @@ void updateScreen(
   SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, 0, 0, 0));
   SDL_BlitSurface(hero, NULL, surface, dest);
   SDL_UpdateWindowSurface(window);
+}
+
+bool canMoveUp(SDL_Rect* dest, SDL_Surface* surface) {
+  return dest->y > surface->clip_rect.y;
+}
+
+bool canMoveDown(SDL_Rect* dest, SDL_Surface* surface) {
+  return (dest->y + dest->h) < (surface->clip_rect.y + surface->clip_rect.h);
+}
+
+bool canMoveLeft(SDL_Rect* dest, SDL_Surface* surface) {
+  return dest->x > surface->clip_rect.x;
+}
+
+bool canMoveRight(SDL_Rect* dest, SDL_Surface* surface) {
+  return (dest->x + dest->w) < (surface->clip_rect.x + surface->clip_rect.w);
 }
