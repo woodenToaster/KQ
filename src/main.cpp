@@ -44,6 +44,11 @@ bool canMoveDown(SDL_Rect* dest, SDL_Surface* surface);
 bool canMoveLeft(SDL_Rect* dest, SDL_Surface* surface);
 bool canMoveRight(SDL_Rect* dest, SDL_Surface* surface);
 
+bool upIsInMap(SDL_Rect* dest, SDL_Surface* surface);
+bool downIsInMap(SDL_Rect* dest, SDL_Surface* surface);
+bool leftIsInMap(SDL_Rect* dest, SDL_Surface* surface);
+bool rightIsInMap(SDL_Rect* dest, SDL_Surface* surface);
+
 bool targetIsObstruction(SDL_Rect* dest);
 bool upIsObstruction(SDL_Rect* dest);
 bool downIsObstruction(SDL_Rect* dest);
@@ -161,6 +166,7 @@ void update(
   updateScreen(window, surface, hero, dest);
 }
 
+//TODO: Speed for diagonal movement should be speed/sqrt(2)
 void updateDestination(SDL_Rect* dest, SDL_Surface* surface) {
   
   const Uint8* state = SDL_GetKeyboardState(NULL);
@@ -191,19 +197,35 @@ void updateScreen(
 }
 
 bool canMoveUp(SDL_Rect* dest, SDL_Surface* surface) {
-  return dest->y > surface->clip_rect.y && !upIsObstruction(dest);
+  return  upIsInMap(dest, surface) && !upIsObstruction(dest);
 }
 
 bool canMoveDown(SDL_Rect* dest, SDL_Surface* surface) {
-  return (dest->y + dest->h) < (surface->clip_rect.y + surface->clip_rect.h) && !downIsObstruction(dest);
+  return downIsInMap(dest, surface) && !downIsObstruction(dest);
 }
 
 bool canMoveLeft(SDL_Rect* dest, SDL_Surface* surface) {
-  return dest->x > surface->clip_rect.x && !leftIsObstruction(dest);
+  return leftIsInMap(dest, surface) && !leftIsObstruction(dest);
 }
 
 bool canMoveRight(SDL_Rect* dest, SDL_Surface* surface) {
-  return (dest->x + dest->w) < (surface->clip_rect.x + surface->clip_rect.w) && !rightIsObstruction(dest); 
+  return rightIsInMap(dest, surface) && !rightIsObstruction(dest); 
+}
+
+bool upIsInMap(SDL_Rect* dest, SDL_Surface* surface) {
+  return dest->y > surface->clip_rect.y;
+}
+
+bool downIsInMap(SDL_Rect* dest, SDL_Surface* surface) {
+  return (dest->y + dest->h) < (surface->clip_rect.y + surface->clip_rect.h);
+}
+
+bool leftIsInMap(SDL_Rect* dest, SDL_Surface* surface) {
+  return dest->x > surface->clip_rect.x;
+}
+
+bool rightIsInMap(SDL_Rect* dest, SDL_Surface* surface) {
+  return (dest->x + dest->w) < (surface->clip_rect.x + surface->clip_rect.w);
 }
 
 void makeTiles() {
