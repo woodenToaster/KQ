@@ -65,6 +65,9 @@ void makeObstructions();
 void drawObstructions(SDL_Surface* surface);
 void drawObstruction(SDL_Surface* surface, obstruction* o);
 
+void destroyTiles();
+void destroyObstructions();
+
 std::vector<tile> tiles;
 std::vector<obstruction> obstructions;
 
@@ -119,9 +122,8 @@ int main(int argc, char** argv) {
 
   SDL_FreeSurface(hero);
 
-  //TODO: Manage resources properly
-  SDL_FreeSurface(tiles[0].surface);
-  SDL_FreeSurface(obstructions[0].surface);
+  destroyTiles();
+  destroyObstructions();
 
   SDL_DestroyWindow(window);
 
@@ -231,7 +233,7 @@ bool rightIsInMap(SDL_Rect* dest, SDL_Surface* surface) {
 }
 
 void makeTiles() {
-  //TODO: potential memory leak.  Use std::shared_ptr
+  //TODO(Chris): potential memory leak.  Use std::shared_ptr
   SDL_Surface* grassSurface = SDL_CreateRGBSurface(0, TILE_SIZE, TILE_SIZE, 32, 0, 0, 0, 0);
 
   for(int row = 0; row < (SCREEN_WIDTH / TILE_SIZE); ++row) {
@@ -255,12 +257,15 @@ void drawTile(SDL_Surface* surface, tile* t) {
   SDL_BlitSurface(t->surface, NULL, surface, t->dest);
 }
 
+//TODO(Chris): Delete dest for all obstructions and tiles
 void makeObstructions() {
   SDL_Surface* boulder = SDL_CreateRGBSurface(0, TILE_SIZE * 4, TILE_SIZE * 4, 32, 0, 0, 0, 0);
-  obstruction obs;
-  obs.surface = boulder;
-  obs.dest = new SDL_Rect{45, 88, TILE_SIZE, TILE_SIZE};
-  obstructions.push_back(obs);
+  for(int i = 0; i < 2; ++i) {
+    obstruction obs;
+    obs.surface = boulder;
+    obs.dest = new SDL_Rect{45 * (i + 1), 72 * (i + 1), TILE_SIZE, TILE_SIZE};
+    obstructions.push_back(obs);
+  }
 }
 
 void drawObstructions(SDL_Surface* targetSurface) {
@@ -331,3 +336,23 @@ bool rightIsObstruction(SDL_Rect* dest) {
   }
   return false;
 }
+
+void destroyTiles() {
+  for(tile t : tiles) {
+    delete t.dest;
+  }
+  //TODO(Chris): Handle this with std::shared_ptr to avoid memory leaks
+  SDL_FreeSurface(tiles[0].surface);
+}
+
+void destroyObstructions() {
+  for(obstruction o : obstructions) {
+    delete o.dest;
+  }
+  //TODO(Chris): Handle this with std::shared_ptr to avoid memory leaks
+  SDL_FreeSurface(obstructions[0].surface);
+}
+
+
+  
+
