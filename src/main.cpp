@@ -29,15 +29,22 @@ void update(
   SDL_Window* window, 
   SDL_Surface* surface, 
   SDL_Surface* hero,
-  SDL_Rect* dest
+  SDL_Rect* dest,
+  SDL_Surface* enemy,
+  SDL_Rect* enemyDest
 );
-void updateDestination(SDL_Rect* dest, SDL_Surface* surface);
+void updateHero(SDL_Rect* dest, SDL_Surface* surface);
+void updateEnemy(SDL_Rect* enemyDest, SDL_Surface* surface);
 void updateScreen(
   SDL_Window* window, 
   SDL_Surface* surface, 
   SDL_Surface* hero,
-  SDL_Rect* dest
+  SDL_Rect* dest,
+  SDL_Surface* enemy,
+  SDL_Rect* enemyDest
 );
+
+bool heroAndEnemyOverlap(SDL_Rect* heroLocation, SDL_Rect* enemyLocation);
 
 bool canMoveUp(SDL_Rect* dest, SDL_Surface* surface);
 bool canMoveDown(SDL_Rect* dest, SDL_Surface* surface);
@@ -90,14 +97,13 @@ int main(int argc, char** argv) {
   surface = SDL_GetWindowSurface(window);
   
   SDL_Surface* hero = SDL_CreateRGBSurface(0, 32, 32, 32, 0, 0, 0, 0);
-  
+  SDL_Surface* enemy = SDL_CreateRGBSurface(0, 32, 32, 32, 0, 0, 0, 0);
+
   SDL_FillRect(hero, NULL, SDL_MapRGB(hero->format, 0, 0, 255));
+  SDL_FillRect(enemy, NULL, SDL_MapRGB(enemy->format, 255, 0, 0));
 
   SDL_Rect dest{0,0,32,32};
-
-  SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, 0, 0, 0));
-  SDL_BlitSurface(hero, NULL, surface, &dest);
-  SDL_UpdateWindowSurface(window);
+  SDL_Rect enemyDest{SCREEN_WIDTH - 32, SCREEN_HEIGHT - 32, 32, 32};
 
   makeTiles();
   drawTiles(surface);
@@ -113,14 +119,18 @@ int main(int argc, char** argv) {
     if(SDL_PollEvent(&event)) 
       quit = shouldClose(&event);
     
+    if(heroAndEnemyOverlap(&dest, &enemyDest))
+      break;
+
     //TODO(Chris): Currently updating even when nothing changes.
     //We only want to update when something on the screen has changed.
-    update(window, surface, hero, &dest);
+    update(window, surface, hero, &dest, enemy, &enemyDest);
 
     SDL_Delay(10);
   }
 
   SDL_FreeSurface(hero);
+  SDL_FreeSurface(enemy);
 
   destroyTiles();
   destroyObstructions();
@@ -164,14 +174,18 @@ void update(
   SDL_Window* window, 
   SDL_Surface* surface, 
   SDL_Surface* hero,
-  SDL_Rect* dest) {
+  SDL_Rect* dest,
+  SDL_Surface* enemy,
+  SDL_Rect* enemyDest) {
 
-  updateDestination(dest, surface);
-  updateScreen(window, surface, hero, dest);
+  updateHero(dest, surface);
+  updateEnemy(enemyDest, surface);
+
+  updateScreen(window, surface, hero, dest, enemy, enemyDest);
 }
 
 //TODO: Speed for diagonal movement should be speed/sqrt(2)
-void updateDestination(SDL_Rect* dest, SDL_Surface* surface) {
+void updateHero(SDL_Rect* dest, SDL_Surface* surface) {
   
   const Uint8* state = SDL_GetKeyboardState(NULL);
 
@@ -188,15 +202,24 @@ void updateDestination(SDL_Rect* dest, SDL_Surface* surface) {
     dest->x += 1;
 }
 
+void updateEnemy(SDL_Rect* enemyDest, SDL_Surface* surface) {
+  //Get the angle from the center of the enemy's square to the center of the hero's
+  //int directionInDegrees;
+  //Move the enemy in that direction, checking for collisions with obstructions
+}
+
 void updateScreen(
   SDL_Window* window, 
   SDL_Surface* surface, 
   SDL_Surface* hero,
-  SDL_Rect* dest) {
+  SDL_Rect* dest,
+  SDL_Surface* enemy,
+  SDL_Rect* enemyDest) {
 
   drawTiles(surface);
   drawObstructions(surface);
   SDL_BlitSurface(hero, NULL, surface, dest);
+  SDL_BlitSurface(enemy, NULL, surface, enemyDest);
   SDL_UpdateWindowSurface(window);
 }
 
@@ -257,7 +280,6 @@ void drawTile(SDL_Surface* surface, tile* t) {
   SDL_BlitSurface(t->surface, NULL, surface, t->dest);
 }
 
-//TODO(Chris): Delete dest for all obstructions and tiles
 void makeObstructions() {
   SDL_Surface* boulder = SDL_CreateRGBSurface(0, TILE_SIZE * 4, TILE_SIZE * 4, 32, 0, 0, 0, 0);
   for(int i = 0; i < 2; ++i) {
@@ -295,6 +317,10 @@ bool overlaps(SDL_Rect* r1, SDL_Rect* r2) {
   bool yOverlaps = y1 < y4 && y2 > y3;
 
   return xOverlaps && yOverlaps;
+}
+
+bool heroAndEnemyOverlap(SDL_Rect* heroLocation, SDL_Rect* enemyLocation) {
+  return overlaps(heroLocation, enemyLocation);
 }
 
 bool upIsObstruction(SDL_Rect* dest) {
