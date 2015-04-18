@@ -55,6 +55,8 @@ bool downIsObstruction(SDL_Rect* dest);
 bool leftIsObstruction(SDL_Rect* dest);
 bool rightIsObstruction(SDL_Rect* dest);
 
+bool overlaps(SDL_Rect* r1, SDL_Rect* r2);
+
 void makeTiles();
 void drawTiles(SDL_Surface* surface);
 void drawTile(SDL_Surface* surface, tile* t);
@@ -197,7 +199,7 @@ void updateScreen(
 }
 
 bool canMoveUp(SDL_Rect* dest, SDL_Surface* surface) {
-  return  upIsInMap(dest, surface) && !upIsObstruction(dest);
+  return upIsInMap(dest, surface) && !upIsObstruction(dest);
 }
 
 bool canMoveDown(SDL_Rect* dest, SDL_Surface* surface) {
@@ -272,52 +274,49 @@ void drawObstruction(SDL_Surface* targetSurface, obstruction* o) {
   SDL_BlitSurface(o->surface, NULL, targetSurface, o->dest);
 }
 
+bool overlaps(SDL_Rect* r1, SDL_Rect* r2) {
+  int x1 = r1->x;
+  int x2 = r1->x + r1->w;
+  int x3 = r2->x;
+  int x4 = r2->x + r2->w;
+
+  bool xOverlaps = x1 < x4 && x2 > x3;
+
+  int y1 = r1->y;
+  int y2 = r1->y + r1->h;
+  int y3 = r2->y;
+  int y4 = r2->y + r2->h;
+
+  bool yOverlaps = y1 < y4 && y2 > y3;
+
+  return xOverlaps && yOverlaps;
+}
+
 bool upIsObstruction(SDL_Rect* dest) {
-  int x1 = dest->x;
-  int x2 = dest->x + dest->w;
 
   for(obstruction o : obstructions) {
-    
-    int x3 = o.dest->x;
-    int x4 = o.dest->x + o.dest->w;
-
-    bool xOverlaps = x1 < x4 && x2 > x3;
-
-    if(dest->y - 1 < o.dest->y + o.dest->w && xOverlaps && dest->y +dest->w > o.dest->y) 
+    SDL_Rect newDest{dest->x, dest->y - 1, dest->w, dest->h};
+    if(overlaps(&newDest, o.dest) && dest->y +dest->w > o.dest->y) 
       return true;
   }
   return false;
 }
 
 bool downIsObstruction(SDL_Rect* dest) {
-  int x1 = dest->x;
-  int x2 = dest->x + dest->w;
  
   for(obstruction o : obstructions) {
-    
-    int x3 = o.dest->x;
-    int x4 = o.dest->x + o.dest->w;
-    
-    bool xOverlaps = x1 < x4 && x2 > x3;
-    
-    if(dest->y + dest->w + 1 > o.dest->y && xOverlaps && dest->y < o.dest->y) 
+    SDL_Rect newDest{dest->x, dest->y, dest->w, dest->h + 1};
+    if(overlaps(&newDest, o.dest) && dest->y < o.dest->y) 
       return true;
   }
   return false;
 }
 
 bool leftIsObstruction(SDL_Rect* dest) {
-  int y1 = dest->y;
-  int y2 = dest->y + dest->h;
 
   for(obstruction o : obstructions) {
-    
-    int y3 = o.dest->y;
-    int y4 = o.dest->y + o.dest->h;
-
-    bool yOverlaps = y1 < y4 && y2 > y3;
-
-    if(dest->x - 1 < o.dest->x + o.dest->w && yOverlaps && dest->x + dest->w > o.dest->x) 
+    SDL_Rect newDest{dest->x - 1, dest->y, dest->w, dest->h};
+    if(overlaps(&newDest, o.dest) && dest->x + dest->w > o.dest->x) 
       return true;
   }
   return false;
@@ -325,17 +324,9 @@ bool leftIsObstruction(SDL_Rect* dest) {
 
 bool rightIsObstruction(SDL_Rect* dest) {
 
-  int y1 = dest->y;
-  int y2 = dest->y + dest->h;
-
   for(obstruction o : obstructions) {
-  
-    int y3 = o.dest->y;
-    int y4 = o.dest->y + o.dest->h;
-
-    bool yOverlaps = y1 < y4 && y2 > y3;
-
-    if(dest->x + dest->w + 1 > o.dest->x && yOverlaps && dest->x < o.dest->x + o.dest->w) 
+    SDL_Rect newDest{dest->x, dest->y, dest->w + 1, dest->h};
+    if(overlaps(&newDest, o.dest) && dest->x < o.dest->x + o.dest->w) 
       return true;
   }
   return false;
