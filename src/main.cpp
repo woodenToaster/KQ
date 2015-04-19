@@ -16,6 +16,11 @@ struct obstruction {
   SDL_Rect* dest;
 };
 
+struct point {
+  double x;
+  double y;
+};
+
 bool shouldClose(SDL_Event* event);
 bool windowCloseClicked(SDL_Event* event);
 bool escapePressed(SDL_Event* event);
@@ -34,7 +39,7 @@ void update(
   SDL_Rect* enemyDest
 );
 void updateHero(SDL_Rect* dest, SDL_Surface* surface);
-void updateEnemy(SDL_Rect* enemyDest, SDL_Surface* surface);
+void updateEnemy(SDL_Rect* heroLocation, SDL_Rect* enemyDest, SDL_Surface* surface);
 void updateScreen(
   SDL_Window* window, 
   SDL_Surface* surface, 
@@ -45,6 +50,7 @@ void updateScreen(
 );
 
 bool heroAndEnemyOverlap(SDL_Rect* heroLocation, SDL_Rect* enemyLocation);
+point center(SDL_Rect* rect);
 
 bool canMoveUp(SDL_Rect* dest, SDL_Surface* surface);
 bool canMoveDown(SDL_Rect* dest, SDL_Surface* surface);
@@ -179,7 +185,7 @@ void update(
   SDL_Rect* enemyDest) {
 
   updateHero(dest, surface);
-  updateEnemy(enemyDest, surface);
+  updateEnemy(dest, enemyDest, surface);
 
   updateScreen(window, surface, hero, dest, enemy, enemyDest);
 }
@@ -202,11 +208,33 @@ void updateHero(SDL_Rect* dest, SDL_Surface* surface) {
     dest->x += 1;
 }
 
-void updateEnemy(SDL_Rect* enemyDest, SDL_Surface* surface) {
-  //Get the angle from the center of the enemy's square to the center of the hero's
-  //int directionInDegrees;
-  //Move the enemy in that direction, checking for collisions with obstructions
+//TODO: Normalize speed for player and enemy
+void updateEnemy(SDL_Rect* heroLocation, SDL_Rect* enemyDest, SDL_Surface* surface) {
+
+  point heroCenter = center(heroLocation);
+  point enemyCenter = center(enemyDest);
+
+  if(heroCenter.x < enemyCenter.x) {
+    if(canMoveLeft(enemyDest, surface))
+      enemyDest->x -= 1;
+  }
+
+  if(heroCenter.x > enemyCenter.x) {
+    if(canMoveRight(enemyDest, surface))
+      enemyDest->x += 1;
+  }
+
+  if(heroCenter.y < enemyCenter.y) {
+    if(canMoveUp(enemyDest, surface))
+      enemyDest->y -= 1;
+  }
+
+  if(heroCenter.y > enemyCenter.y) {
+    if(canMoveDown(enemyDest, surface))
+      enemyDest->y += 1;
+  }
 }
+
 
 void updateScreen(
   SDL_Window* window, 
@@ -321,6 +349,15 @@ bool overlaps(SDL_Rect* r1, SDL_Rect* r2) {
 
 bool heroAndEnemyOverlap(SDL_Rect* heroLocation, SDL_Rect* enemyLocation) {
   return overlaps(heroLocation, enemyLocation);
+}
+
+point center(SDL_Rect* rect) {
+  point p;
+  
+  p.x = rect->x + rect->w / 2.0;
+  p.y = rect->y + rect->h / 2.0;
+
+  return p;
 }
 
 bool upIsObstruction(SDL_Rect* dest) {

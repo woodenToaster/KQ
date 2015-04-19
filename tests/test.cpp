@@ -1,5 +1,6 @@
 #include "catch.hpp"
 
-TEST_CASE( "Testing catch framework", "[what's this?]" ) {
+TEST_CASE( "Find center of rectangle", "[center]" ) {
+    
     REQUIRE( 1 == 1 );
 }
