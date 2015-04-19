@@ -196,16 +196,16 @@ void updateHero(SDL_Rect* dest, SDL_Surface* surface) {
   const Uint8* state = SDL_GetKeyboardState(NULL);
 
   if(state[SDL_SCANCODE_UP] && canMoveUp(dest, surface)) 
-    dest->y -= 1;
+    dest->y -= 2;
     
   if(state[SDL_SCANCODE_DOWN] && canMoveDown(dest, surface)) 
-    dest->y += 1;
+    dest->y += 2;
     
   if(state[SDL_SCANCODE_LEFT] && canMoveLeft(dest, surface)) 
-    dest->x -= 1;
+    dest->x -= 2;
     
   if(state[SDL_SCANCODE_RIGHT] && canMoveRight(dest, surface)) 
-    dest->x += 1;
+    dest->x += 2;
 }
 
 //TODO: Normalize speed for player and enemy
