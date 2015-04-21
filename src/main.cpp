@@ -1,20 +1,7 @@
 #include <iostream>
 #include <vector>
+#include "Hero.h"
 #include "SDL.h"
-
-const int SCREEN_WIDTH = 320;
-const int SCREEN_HEIGHT = 240;
-const int TILE_SIZE = 8;
-
-struct tile {
-  SDL_Surface* surface;
-  SDL_Rect* dest;
-};
-
-struct obstruction {
-  SDL_Surface* surface;
-  SDL_Rect* dest;
-};
 
 struct point {
   double x;
@@ -33,8 +20,7 @@ bool inputDetected();
 void update(
   SDL_Window* window, 
   SDL_Surface* surface, 
-  SDL_Surface* hero,
-  SDL_Rect* dest,
+  Hero* hero,
   SDL_Surface* enemy,
   SDL_Rect* enemyDest
 );
@@ -69,6 +55,8 @@ bool leftIsObstruction(SDL_Rect* dest);
 bool rightIsObstruction(SDL_Rect* dest);
 
 bool overlaps(SDL_Rect* r1, SDL_Rect* r2);
+bool xOverlaps(SDL_Rect* r1, SDL_Rect* r2);
+bool yOverlaps(SDL_Rect* r1, SDL_Rect* r2);
 
 void makeTiles();
 void drawTiles(SDL_Surface* surface);
@@ -81,8 +69,7 @@ void drawObstruction(SDL_Surface* surface, obstruction* o);
 void destroyTiles();
 void destroyObstructions();
 
-std::vector<tile> tiles;
-std::vector<obstruction> obstructions;
+
 
 int main(int argc, char** argv) {
   
@@ -101,14 +88,11 @@ int main(int argc, char** argv) {
   );
   
   surface = SDL_GetWindowSurface(window);
-  
-  SDL_Surface* hero = SDL_CreateRGBSurface(0, 32, 32, 32, 0, 0, 0, 0);
+
+  Hero hero();  
+
   SDL_Surface* enemy = SDL_CreateRGBSurface(0, 32, 32, 32, 0, 0, 0, 0);
-
-  SDL_FillRect(hero, NULL, SDL_MapRGB(hero->format, 0, 0, 255));
   SDL_FillRect(enemy, NULL, SDL_MapRGB(enemy->format, 255, 0, 0));
-
-  SDL_Rect dest{0,0,32,32};
   SDL_Rect enemyDest{SCREEN_WIDTH - 32, SCREEN_HEIGHT - 32, 32, 32};
 
   makeTiles();
@@ -125,12 +109,12 @@ int main(int argc, char** argv) {
     if(SDL_PollEvent(&event)) 
       quit = shouldClose(&event);
     
-    if(heroAndEnemyOverlap(&dest, &enemyDest))
+    if(heroAndEnemyOverlap(hero.getLocation(), &enemyDest))
       break;
 
     //TODO(Chris): Currently updating even when nothing changes.
     //We only want to update when something on the screen has changed.
-    update(window, surface, hero, &dest, enemy, &enemyDest);
+    update(window, surface, &hero, enemy, &enemyDest);
 
     SDL_Delay(10);
   }
@@ -179,19 +163,18 @@ bool keyPressedIsEscape(SDL_Event* event) {
 void update(
   SDL_Window* window, 
   SDL_Surface* surface, 
-  SDL_Surface* hero,
-  SDL_Rect* dest,
+  Hero* hero,
   SDL_Surface* enemy,
   SDL_Rect* enemyDest) {
 
-  updateHero(dest, surface);
+  updateHero(hero);
   //updateEnemy(dest, enemyDest, surface);
 
   updateScreen(window, surface, hero, dest, enemy, enemyDest);
 }
 
 //TODO: Speed for diagonal movement should be speed/sqrt(2)
-void updateHero(SDL_Rect* dest, SDL_Surface* surface) {
+void updateHero(Hero* hero) {
   
   const Uint8* state = SDL_GetKeyboardState(NULL);
 
@@ -235,7 +218,6 @@ void updateEnemy(SDL_Rect* heroLocation, SDL_Rect* enemyDest, SDL_Surface* surfa
   }
 }
 
-
 void updateScreen(
   SDL_Window* window, 
   SDL_Surface* surface, 
@@ -246,7 +228,7 @@ void updateScreen(
 
   drawTiles(surface);
   drawObstructions(surface);
-  SDL_BlitSurface(hero, NULL, surface, dest);
+  
   SDL_BlitSurface(enemy, NULL, surface, enemyDest);
   SDL_UpdateWindowSurface(window);
 }
@@ -330,21 +312,25 @@ void drawObstruction(SDL_Surface* targetSurface, obstruction* o) {
 }
 
 bool overlaps(SDL_Rect* r1, SDL_Rect* r2) {
+  return xOverlaps(r1, r2) && yOverlaps(r1, r2);
+}
+
+bool xOverlaps(SDL_Rect* r1, SDL_Rect* r2) {
   int x1 = r1->x;
   int x2 = r1->x + r1->w;
   int x3 = r2->x;
   int x4 = r2->x + r2->w;
 
-  bool xOverlaps = x1 < x4 && x2 > x3;
+  return x1 < x4 && x2 > x3;
+}
 
+bool yOverlaps(SDL_Rect* r1, SDL_Rect* r2) {
   int y1 = r1->y;
   int y2 = r1->y + r1->h;
   int y3 = r2->y;
   int y4 = r2->y + r2->h;
 
-  bool yOverlaps = y1 < y4 && y2 > y3;
-
-  return xOverlaps && yOverlaps;
+  return y1 < y4 && y2 > y3;
 }
 
 bool heroAndEnemyOverlap(SDL_Rect* heroLocation, SDL_Rect* enemyLocation) {
@@ -360,6 +346,7 @@ point center(SDL_Rect* rect) {
   return p;
 }
 
+//TODO: The obstruction-finding methods are inefficient.  
 bool upIsObstruction(SDL_Rect* dest) {
 
   for(obstruction o : obstructions) {
