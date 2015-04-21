@@ -3,9 +3,13 @@
 
 #include "GameEntity.h"
 
-class Hero : GameEntity {
+class Hero : public GameEntity {
 public:
   Hero();
+  ~Hero();
+
+  void update(Map* map);
+  void draw(Map* map);
 
 private:
 

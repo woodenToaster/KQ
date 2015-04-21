@@ -12,6 +12,7 @@ Hero::~Hero() {
   delete location;
 }
 
+//TODO: Speed for diagonal movement should be speed/sqrt(2)
 void Hero::update(Map* map) {
 
   const Uint8* state = SDL_GetKeyboardState(NULL);

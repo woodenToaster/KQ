@@ -1,6 +1,7 @@
 #ifndef KQ_GAME_ENTITY_H
 #define KQ_GAME_ENTITY_H
 
+#include "Map.h"
 #include "SDL.h"
 
 class GameEntity {
@@ -9,19 +10,18 @@ public:
   virtual void update(Map* map) = 0;
   virtual void draw(Map* map) = 0;
 
-  inline SDL_Rect* getLocation() {return location;}
-  inline SDL_Surface* getImage() {return image;}
+  SDL_Rect* getLocation();
+  SDL_Surface* getImage();
 
   bool canMoveUp(Map* map);
   bool canMoveDown(Map* map);
   bool canMoveLeft(Map* map);
   bool canMoveRight(Map* map);
 
-  bool upIsMap(Map* map);
-  bool downIsMap(Map* map);
-  bool leftIsMap(Map* map);
-  bool rightIsMap(Map* map);
-
+  bool upIsInMap(Map* map);
+  bool downIsInMap(Map* map);
+  bool leftIsInMap(Map* map);
+  bool rightIsInMap(Map* map);
 
 protected:
   SDL_Surface* image; 

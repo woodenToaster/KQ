@@ -1,19 +1,27 @@
 #include "GameEntity.h"
 
+SDL_Rect* GameEntity::getLocation() {
+  return location;
+}
+
+SDL_Surface* GameEntity::getImage() {
+  return image;
+}
+
 bool GameEntity::canMoveUp(Map* map) {
-  return upIsInMap(map) && !upIsObstruction(map);
+  return upIsInMap(map) && !map->upIsObstruction(location);
 }
 
 bool GameEntity::canMoveDown(Map* map) {
-  return downIsInMap(map) && !downIsObstruction(map);
+  return downIsInMap(map) && !map->downIsObstruction(location);
 }
 
 bool GameEntity::canMoveLeft(Map* map) {
-  return leftIsInMap(map) && !leftIsObstruction(map);
+  return leftIsInMap(map) && !map->leftIsObstruction(location);
 }
 
 bool GameEntity::canMoveRight(Map* map) {
-  return rightIsInMap(map) && !rightIsObstruction(map); 
+  return rightIsInMap(map) && !map->rightIsObstruction(location); 
 }
 
 bool GameEntity::upIsInMap(Map* map) {
@@ -31,3 +39,5 @@ bool GameEntity::leftIsInMap(Map* map) {
 bool GameEntity::rightIsInMap(Map* map) {
   return (location->x + location->w) < (map->getMapSurface()->clip_rect.x + map->getMapSurface()->clip_rect.w);
 }
+
+

@@ -12,10 +12,21 @@ CXX = g++
 CPPFLAGS = -g $(WARNING_FLAGS) -I$(INCLUDE_DIR) `sdl2-config --cflags` -std=c++11
 LIBS = `sdl2-config --libs` -lSDL_image 
 
-all: $(SRC_DIR)/main.o
-	$(CXX) $(LDFLAGS) $(CPPFLAGS) $^ $(LIBS) -o $(EXEC)
+headers = \
+	$(INCLUDE_DIR)/GameEntity.h \
+	$(INCLUDE_DIR)/Hero.h \
+	$(INCLUDE_DIR)/Map.h \
 
-main.o: $(SRC_DIR)/main.cpp
+objects = \
+	$(SRC_DIR)/main.o \
+	$(SRC_DIR)/GameEntity.o \
+	$(SRC_DIR)/Hero.o \
+	$(SRC_DIR)/Map.o
+
+all: $(objects) $(headers)
+	$(CXX) $(LDFLAGS) $(CPPFLAGS) $(objects) $(LIBS) -o $(EXEC)
+
+%.o: %.cpp $(headers)
 	$(CXX) -o $@ -c $< $(CPPFLAGS)
 
 test:
