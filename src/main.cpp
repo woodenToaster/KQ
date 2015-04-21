@@ -185,7 +185,7 @@ void update(
   SDL_Rect* enemyDest) {
 
   updateHero(dest, surface);
-  updateEnemy(dest, enemyDest, surface);
+  //updateEnemy(dest, enemyDest, surface);
 
   updateScreen(window, surface, hero, dest, enemy, enemyDest);
 }
@@ -196,16 +196,16 @@ void updateHero(SDL_Rect* dest, SDL_Surface* surface) {
   const Uint8* state = SDL_GetKeyboardState(NULL);
 
   if(state[SDL_SCANCODE_UP] && canMoveUp(dest, surface)) 
-    dest->y -= 2;
+    dest->y -= 1;
     
   if(state[SDL_SCANCODE_DOWN] && canMoveDown(dest, surface)) 
-    dest->y += 2;
+    dest->y += 1;
     
   if(state[SDL_SCANCODE_LEFT] && canMoveLeft(dest, surface)) 
-    dest->x -= 2;
+    dest->x -= 1;
     
   if(state[SDL_SCANCODE_RIGHT] && canMoveRight(dest, surface)) 
-    dest->x += 2;
+    dest->x += 1;
 }
 
 //TODO: Normalize speed for player and enemy
@@ -310,7 +310,7 @@ void drawTile(SDL_Surface* surface, tile* t) {
 
 void makeObstructions() {
   SDL_Surface* boulder = SDL_CreateRGBSurface(0, TILE_SIZE * 4, TILE_SIZE * 4, 32, 0, 0, 0, 0);
-  for(int i = 0; i < 2; ++i) {
+  for(int i = 0; i < 3; ++i) {
     obstruction obs;
     obs.surface = boulder;
     obs.dest = new SDL_Rect{45 * (i + 1), 72 * (i + 1), TILE_SIZE, TILE_SIZE};
@@ -364,7 +364,7 @@ bool upIsObstruction(SDL_Rect* dest) {
 
   for(obstruction o : obstructions) {
     SDL_Rect newDest{dest->x, dest->y - 1, dest->w, dest->h};
-    if(overlaps(&newDest, o.dest) && dest->y +dest->w > o.dest->y) 
+    if(overlaps(&newDest, o.dest) && (dest->y + dest->h) > o.dest->y) 
       return true;
   }
   return false;
