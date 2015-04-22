@@ -13,15 +13,19 @@ CPPFLAGS = -g $(WARNING_FLAGS) -I$(INCLUDE_DIR) `sdl2-config --cflags` -std=c++1
 LIBS = `sdl2-config --libs` -lSDL_image 
 
 headers = \
+	$(INCLUDE_DIR)/Enemy.h \
 	$(INCLUDE_DIR)/GameEntity.h \
 	$(INCLUDE_DIR)/Hero.h \
 	$(INCLUDE_DIR)/Map.h \
+	$(INCLUDE_DIR)/Rectangle.h
 
 objects = \
 	$(SRC_DIR)/main.o \
+	$(SRC_DIR)/Enemy.o \
 	$(SRC_DIR)/GameEntity.o \
 	$(SRC_DIR)/Hero.o \
-	$(SRC_DIR)/Map.o
+	$(SRC_DIR)/Map.o \
+	$(SRC_DIR)/Rectangle.o
 
 all: $(objects) $(headers)
 	$(CXX) $(LDFLAGS) $(CPPFLAGS) $(objects) $(LIBS) -o $(EXEC)

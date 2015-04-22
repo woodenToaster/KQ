@@ -1,11 +1,36 @@
 #include "GameEntity.h"
+#include "Map.h"
 
-SDL_Rect* GameEntity::getLocation() {
+Rectangle* GameEntity::getLocation() {
   return location;
 }
 
 SDL_Surface* GameEntity::getImage() {
   return image;
+}
+
+int GameEntity::getX() {
+  return location->getInternalRect()->x;
+}
+
+int GameEntity::getY() {
+  return location->getInternalRect()->y;
+}
+
+int GameEntity::getWidth() {
+  return location->getInternalRect()->w;
+}
+
+int GameEntity::getHeight() {
+  return location->getInternalRect()->h;
+}
+
+void GameEntity::setX(int newX) {
+  location->getInternalRect()->x = newX;
+}
+
+void GameEntity::setY(int newY) {
+  location->getInternalRect()->y = newY;
 }
 
 bool GameEntity::canMoveUp(Map* map) {
@@ -25,19 +50,19 @@ bool GameEntity::canMoveRight(Map* map) {
 }
 
 bool GameEntity::upIsInMap(Map* map) {
-  return location->y > map->getMapSurface()->clip_rect.y;
+  return getY() > map->getMapSurface()->clip_rect.y;
 }
 
 bool GameEntity::downIsInMap(Map* map) {
-  return (location->y + location->h) < (map->getMapSurface()->clip_rect.y + map->getMapSurface()->clip_rect.h);
+  return (getY() + getHeight()) < (map->getMapSurface()->clip_rect.y + map->getMapSurface()->clip_rect.h);
 }
 
 bool GameEntity::leftIsInMap(Map* map) {
-  return location->x > map->getMapSurface()->clip_rect.x;
+  return getX() > map->getMapSurface()->clip_rect.x;
 }
 
 bool GameEntity::rightIsInMap(Map* map) {
-  return (location->x + location->w) < (map->getMapSurface()->clip_rect.x + map->getMapSurface()->clip_rect.w);
+  return (getX() + getWidth()) < (map->getMapSurface()->clip_rect.x + map->getMapSurface()->clip_rect.w);
 }
 
 

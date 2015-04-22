@@ -1,9 +1,11 @@
 #include "Hero.h"
+#include "Map.h"
+#include "Rectangle.h"
 
 Hero::Hero() {
 	
   image = SDL_CreateRGBSurface(0, 32, 32, 32, 0, 0, 0, 0);
-  location = new SDL_Rect{0,0,32,32};
+  location = new Rectangle(0,0,32,32);
 
   SDL_FillRect(image, NULL, SDL_MapRGB(image->format, 0, 0, 255));
 }
@@ -18,18 +20,18 @@ void Hero::update(Map* map) {
   const Uint8* state = SDL_GetKeyboardState(NULL);
 
   if(state[SDL_SCANCODE_UP] && canMoveUp(map)) 
-    location->y -= 1;
+    setY(getY() - 1);
     
   if(state[SDL_SCANCODE_DOWN] && canMoveDown(map)) 
-    location->y += 1;
+    setY(getY() + 1);
     
   if(state[SDL_SCANCODE_LEFT] && canMoveLeft(map)) 
-    location->x -= 1;
+    setX(getX() - 1);
     
   if(state[SDL_SCANCODE_RIGHT] && canMoveRight(map)) 
-    location->x += 1;
+    setX(getX() + 1);
 }
 
 void Hero::draw(Map* map) {
-  SDL_BlitSurface(image, NULL, map->getMapSurface(), location);
+  SDL_BlitSurface(image, NULL, map->getMapSurface(), location->getInternalRect());
 }

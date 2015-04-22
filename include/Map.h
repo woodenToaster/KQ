@@ -2,6 +2,8 @@
 #define KQ_MAP_H
 
 #include <vector>
+#include "Hero.h"
+#include "Rectangle.h"
 #include "SDL.h"
 
 class Map {
@@ -12,18 +14,20 @@ public:
 
   struct tile {
     SDL_Surface* surface;
-    SDL_Rect* dest;
+    Rectangle* location;
   };
 
   struct obstruction {
     SDL_Surface* surface;
-    SDL_Rect* dest;
+    Rectangle* location;
   };
 
-  Map(SDL_Window* window);
+  Map(SDL_Window* window, Hero* hero);
   ~Map();
 
   SDL_Surface* getMapSurface();
+
+  Hero* getHero();
 
   void makeTiles();
   void makeObstructions();
@@ -37,16 +41,19 @@ public:
   void destroyTiles();
   void destroyObstructions();
 
-  bool upIsObstruction(SDL_Rect* location);
-  bool downIsObstruction(SDL_Rect* location);
-  bool leftIsObstruction(SDL_Rect* location);
-  bool rightIsObstruction(SDL_Rect* location);
+  bool upIsObstruction(Rectangle* location);
+  bool downIsObstruction(Rectangle* location);
+  bool leftIsObstruction(Rectangle* location);
+  bool rightIsObstruction(Rectangle* location);
 
 private:
   std::vector<tile> tiles;
   std::vector<obstruction> obstructions;
 
   SDL_Surface* mapSurface;
+
+  //TODO: This is only temporary
+  Hero* hero;
 };
 
 #endif

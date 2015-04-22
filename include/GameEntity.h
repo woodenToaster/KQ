@@ -1,17 +1,27 @@
 #ifndef KQ_GAME_ENTITY_H
 #define KQ_GAME_ENTITY_H
 
-#include "Map.h"
+#include "Rectangle.h"
 #include "SDL.h"
+
+class Map;
 
 class GameEntity {
 public:
-  virtual ~GameEntity() = 0;
+  virtual ~GameEntity() {}
   virtual void update(Map* map) = 0;
   virtual void draw(Map* map) = 0;
 
-  SDL_Rect* getLocation();
+  Rectangle* getLocation();
   SDL_Surface* getImage();
+
+  int getX();
+  int getY();
+  int getWidth();
+  int getHeight();
+
+  void setX(int newX);
+  void setY(int newY);
 
   bool canMoveUp(Map* map);
   bool canMoveDown(Map* map);
@@ -25,7 +35,7 @@ public:
 
 protected:
   SDL_Surface* image; 
-  SDL_Rect* location;
+  Rectangle* location;
 };
 
 #endif
