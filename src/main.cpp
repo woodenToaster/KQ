@@ -41,6 +41,8 @@ int main(int argc, char** argv) {
   bool quit = false;
 
   while(!quit) {
+    Uint32 start = SDL_GetTicks();
+
     if(SDL_PollEvent(&event)) 
       quit = shouldClose(&event);
     
@@ -52,7 +54,10 @@ int main(int argc, char** argv) {
     update(window, &map, &hero, &enemy);
     drawWorld(window, &map, &hero, &enemy);
 
-    SDL_Delay(10);
+    //TODO(Chris): Remove magic number
+    Uint32 msToSleep = start + 16 - SDL_GetTicks();
+    if(msToSleep > 0)
+      SDL_Delay(msToSleep);
   }
 
   SDL_DestroyWindow(window);
