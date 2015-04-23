@@ -5,6 +5,9 @@
 #include "Map.h"
 #include "SDL.h"
 
+const int FRAMES_PER_SECOND = 60;
+const int MS_PER_FRAME = 1000 / FRAMES_PER_SECOND;
+
 bool shouldClose(SDL_Event* event);
 bool windowCloseClicked(SDL_Event* event);
 bool escapePressed(SDL_Event* event);
@@ -54,8 +57,7 @@ int main(int argc, char** argv) {
     update(window, &map, &hero, &enemy);
     drawWorld(window, &map, &hero, &enemy);
 
-    //TODO(Chris): Remove magic number
-    Uint32 msToSleep = start + 16 - SDL_GetTicks();
+    Uint32 msToSleep = start + MS_PER_FRAME - SDL_GetTicks();
     if(msToSleep > 0)
       SDL_Delay(msToSleep);
   }
@@ -98,7 +100,7 @@ bool keyPressedIsEscape(SDL_Event* event) {
 void update(SDL_Window* window, Map* map, Hero* hero, Enemy* enemy) {
 
   hero->update(map);
-  enemy->update(map);
+  //enemy->update(map);
 }
 
 void drawWorld(SDL_Window* window, Map* map, Hero* hero, Enemy* enemy) {

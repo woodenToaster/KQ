@@ -23,6 +23,11 @@ public:
   void setX(int newX);
   void setY(int newY);
 
+  void setBBx(int newX);
+  void setBBy(int newY);
+  void setBBw(int newW);
+  void setBBh(int newH);
+  
   bool canMoveUp(Map* map);
   bool canMoveDown(Map* map);
   bool canMoveLeft(Map* map);
@@ -36,6 +41,8 @@ public:
 protected:
   SDL_Surface* image; 
   Rectangle* location;
+  Rectangle* locationInSpriteSheet;
+  Rectangle* boundingBox;
 };
 
 #endif

@@ -14,6 +14,11 @@ public:
   int getY();
   int getWidth();
   int getHeight();
+
+  void setX(int newX);
+  void setY(int newY);
+  void setWidth(int newW);
+  void setHeight(int newH);
   
   bool overlaps(SDL_Rect* rect);
   bool xOverlaps(SDL_Rect* rect);

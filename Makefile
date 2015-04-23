@@ -10,7 +10,7 @@ EXEC = kirpsquest
 
 CXX = g++
 CPPFLAGS = -g $(WARNING_FLAGS) -I$(INCLUDE_DIR) `sdl2-config --cflags` -std=c++11
-LIBS = `sdl2-config --libs` -lSDL_image 
+LIBS = `sdl2-config --libs` -lSDL2_image 
 
 headers = \
 	$(INCLUDE_DIR)/Enemy.h \

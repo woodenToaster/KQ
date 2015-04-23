@@ -33,6 +33,22 @@ void GameEntity::setY(int newY) {
   location->getInternalRect()->y = newY;
 }
 
+void GameEntity::setBBx(int newX) {
+  boundingBox->setX(newX);
+}
+
+void GameEntity::setBBy(int newY) {
+  boundingBox->setY(newY);
+}
+
+void GameEntity::setBBw(int newW) {
+  boundingBox->setWidth(newW);
+}
+
+void GameEntity::setBBh(int newH) {
+  boundingBox->setHeight(newH);
+}
+
 bool GameEntity::canMoveUp(Map* map) {
   return upIsInMap(map) && !map->upIsObstruction(location);
 }

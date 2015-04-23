@@ -12,7 +12,7 @@ public:
   void draw(Map* map);
   
 private:
-
+  
 };
 
 #endif

@@ -1,11 +1,12 @@
 #include "Enemy.h"
 #include "Map.h"
+#include "SDL_image.h"
 
 Enemy::Enemy() {
 	
-  image = SDL_CreateRGBSurface(0, 32, 32, 32, 0, 0, 0, 0);
+  image = IMG_Load("./data/billy.png");
   location = new Rectangle(Map::SCREEN_WIDTH - 32, Map::SCREEN_HEIGHT - 32, 32, 32);
-  SDL_FillRect(image, NULL, SDL_MapRGB(image->format, 255, 0, 0));
+  locationInSpriteSheet = new Rectangle(0, 96, 32, 32);
 }
 
 Enemy::~Enemy() {
@@ -45,5 +46,10 @@ void Enemy::update(Map* map) {
 }
 
 void Enemy::draw(Map* map) {
-	SDL_BlitSurface(image, NULL, map->getMapSurface(), location->getInternalRect());
+	SDL_BlitSurface(
+    image,
+    locationInSpriteSheet->getInternalRect(), 
+    map->getMapSurface(), 
+    location->getInternalRect()
+  );
 }

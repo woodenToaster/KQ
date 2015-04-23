@@ -29,6 +29,22 @@ int Rectangle::getHeight() {
   return internal_rect->h;
 }
 
+void Rectangle::setX(int newX) {
+  internal_rect->x = newX;
+}
+
+void Rectangle::setY(int newY) {
+  internal_rect->y = newY;
+}
+
+void Rectangle::setWidth(int newW) {
+  internal_rect->w = newW;
+}
+
+void Rectangle::setHeight(int newH) {
+  internal_rect->h = newH;
+}
+
 bool Rectangle::overlaps(SDL_Rect* rect) {
   return xOverlaps(rect) && yOverlaps(rect);
 }

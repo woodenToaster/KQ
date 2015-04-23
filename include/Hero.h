@@ -9,6 +9,7 @@ public:
   ~Hero();
 
   void update(Map* map);
+  void updateBoundingBox();
   void draw(Map* map);
 
 private:
