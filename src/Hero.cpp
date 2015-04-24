@@ -11,13 +11,13 @@ Hero::Hero() {
   if(!image) {
     std::cout << "Image not loaded";
   }
-  location = new Rectangle(0, 0, 24, 24);
-  boundingBox = new Rectangle(0, 0, 24, 24);
+  startingLocation = new Rectangle(0, 0, 16, 22);
+  boundingBox = new Rectangle(4, 1, 16, 22);
   locationInSpriteSheet = new Rectangle(0, 136, 24, 24);
 }
 
 Hero::~Hero() {
-  delete location;
+  delete startingLocation;
   delete locationInSpriteSheet;
   delete boundingBox;
 }
@@ -28,25 +28,16 @@ void Hero::update(Map* map) {
   const Uint8* state = SDL_GetKeyboardState(NULL);
 
   if(state[SDL_SCANCODE_UP] && canMoveUp(map)) 
-    setY(getY() - 1);
+    setBBy(getBBy() - 1);
     
   if(state[SDL_SCANCODE_DOWN] && canMoveDown(map)) 
-    setY(getY() + 1);
+    setBBy(getBBy() + 1);
     
   if(state[SDL_SCANCODE_LEFT] && canMoveLeft(map)) 
-    setX(getX() - 1);
+    setBBx(getBBx() - 1);
     
   if(state[SDL_SCANCODE_RIGHT] && canMoveRight(map)) 
-    setX(getX() + 1);
-
-  updateBoundingBox();
-}
-
-void Hero::updateBoundingBox() {
-  setBBx(getX() + 4);
-  setBBy(getY() + 1);
-  setBBw(getWidth() - 8);
-  setBBh(getHeight() - 2);
+    setBBx(getBBx() + 1);
 }
 
 void Hero::draw(Map* map) {

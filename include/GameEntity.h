@@ -12,16 +12,14 @@ public:
   virtual void update(Map* map) = 0;
   virtual void draw(Map* map) = 0;
 
-  Rectangle* getLocation();
+  Rectangle* getStartingLocation();
   SDL_Surface* getImage();
+  Rectangle* getBoundingBox();
 
-  int getX();
-  int getY();
-  int getWidth();
-  int getHeight();
-
-  void setX(int newX);
-  void setY(int newY);
+  int getBBx();
+  int getBBy();
+  int getBBw();
+  int getBBh();
 
   void setBBx(int newX);
   void setBBy(int newY);
@@ -40,7 +38,7 @@ public:
 
 protected:
   SDL_Surface* image; 
-  Rectangle* location;
+  Rectangle* startingLocation;
   Rectangle* locationInSpriteSheet;
   Rectangle* boundingBox;
 };

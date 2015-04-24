@@ -1,37 +1,56 @@
 #include "GameEntity.h"
 #include "Map.h"
 
-Rectangle* GameEntity::getLocation() {
-  return location;
+Rectangle* GameEntity::getStartingLocation() {
+  return startingLocation;
 }
 
 SDL_Surface* GameEntity::getImage() {
   return image;
 }
 
-int GameEntity::getX() {
-  return location->getInternalRect()->x;
+Rectangle* GameEntity::getBoundingBox() {
+  return boundingBox;
+}
+// int GameEntity::getX() {
+//   return location->getInternalRect()->x;
+// }
+
+// int GameEntity::getY() {
+//   return location->getInternalRect()->y;
+// }
+
+// int GameEntity::getWidth() {
+//   return location->getInternalRect()->w;
+// }
+
+// int GameEntity::getHeight() {
+//   return location->getInternalRect()->h;
+// }
+
+int GameEntity::getBBx() {
+  return boundingBox->getX();
 }
 
-int GameEntity::getY() {
-  return location->getInternalRect()->y;
+int GameEntity::getBBy() {
+  return boundingBox->getY();
 }
 
-int GameEntity::getWidth() {
-  return location->getInternalRect()->w;
+int GameEntity::getBBw() {
+  return boundingBox->getWidth();
 }
 
-int GameEntity::getHeight() {
-  return location->getInternalRect()->h;
+int GameEntity::getBBh() {
+  return boundingBox->getHeight();
 }
 
-void GameEntity::setX(int newX) {
-  location->getInternalRect()->x = newX;
-}
+// void GameEntity::setX(int newX) {
+//   location->getInternalRect()->x = newX;
+// }
 
-void GameEntity::setY(int newY) {
-  location->getInternalRect()->y = newY;
-}
+// void GameEntity::setY(int newY) {
+//   location->getInternalRect()->y = newY;
+// }
 
 void GameEntity::setBBx(int newX) {
   boundingBox->setX(newX);
@@ -50,35 +69,35 @@ void GameEntity::setBBh(int newH) {
 }
 
 bool GameEntity::canMoveUp(Map* map) {
-  return upIsInMap(map) && !map->upIsObstruction(location);
+  return upIsInMap(map) && !map->upIsObstruction(boundingBox);
 }
 
 bool GameEntity::canMoveDown(Map* map) {
-  return downIsInMap(map) && !map->downIsObstruction(location);
+  return downIsInMap(map) && !map->downIsObstruction(boundingBox);
 }
 
 bool GameEntity::canMoveLeft(Map* map) {
-  return leftIsInMap(map) && !map->leftIsObstruction(location);
+  return leftIsInMap(map) && !map->leftIsObstruction(boundingBox);
 }
 
 bool GameEntity::canMoveRight(Map* map) {
-  return rightIsInMap(map) && !map->rightIsObstruction(location); 
+  return rightIsInMap(map) && !map->rightIsObstruction(boundingBox); 
 }
 
 bool GameEntity::upIsInMap(Map* map) {
-  return getY() > map->getMapSurface()->clip_rect.y;
+  return getBBy() > map->getMapSurface()->clip_rect.y;
 }
 
 bool GameEntity::downIsInMap(Map* map) {
-  return (getY() + getHeight()) < (map->getMapSurface()->clip_rect.y + map->getMapSurface()->clip_rect.h);
+  return (getBBy() + getBBh()) < (map->getMapSurface()->clip_rect.y + map->getMapSurface()->clip_rect.h);
 }
 
 bool GameEntity::leftIsInMap(Map* map) {
-  return getX() > map->getMapSurface()->clip_rect.x;
+  return getBBx() > map->getMapSurface()->clip_rect.x;
 }
 
 bool GameEntity::rightIsInMap(Map* map) {
-  return (getX() + getWidth()) < (map->getMapSurface()->clip_rect.x + map->getMapSurface()->clip_rect.w);
+  return (getBBx() + getBBw()) < (map->getMapSurface()->clip_rect.x + map->getMapSurface()->clip_rect.w);
 }
 
 

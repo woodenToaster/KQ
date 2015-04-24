@@ -49,7 +49,7 @@ int main(int argc, char** argv) {
     if(SDL_PollEvent(&event)) 
       quit = shouldClose(&event);
     
-    if(hero.getLocation()->overlaps(enemy.getLocation()->getInternalRect()))
+    if(hero.getBoundingBox()->overlaps(enemy.getBoundingBox()->getInternalRect()))
       break;
 
     //TODO(Chris): Currently updating even when nothing changes.
