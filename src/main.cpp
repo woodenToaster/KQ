@@ -39,7 +39,7 @@ int main(int argc, char** argv) {
   Enemy enemy;
   Map map(window, &hero);
   map.putHeroOnMap(&hero);
-  //map.putEnemyOnMap(&enemy);
+  map.putEnemyOnMap(&enemy);
 
   SDL_Event event;
 
@@ -102,7 +102,7 @@ bool keyPressedIsEscape(SDL_Event* event) {
 void update(SDL_Window* window, Map* map, Hero* hero, Enemy* enemy) {
 
   hero->update(map);
-  //enemy->update(map);
+  enemy->update(map);
 }
 
 void drawWorld(SDL_Window* window, Map* map, Hero* hero, Enemy* enemy) {
@@ -111,7 +111,7 @@ void drawWorld(SDL_Window* window, Map* map, Hero* hero, Enemy* enemy) {
   map->drawObstructions();
   
   hero->draw(map);
-  //enemy->draw(map);
+  enemy->draw(map);
 
   SDL_UpdateWindowSurface(window);
 }

@@ -7,12 +7,12 @@ Enemy::Enemy() {
   image = IMG_Load("./data/billy.png");
   startingLocation = new Rectangle(Map::SCREEN_WIDTH - 32, Map::SCREEN_HEIGHT - 32, 32, 32);
   boundingBox = new Rectangle(
-    startingLocation->getX() + 6,
-    startingLocation->getY() + 4, 
+    startingLocation->getX(),
+    startingLocation->getY(), 
     20, 
     28
   );
-  locationInSpriteSheet = new Rectangle(0, 96, 32, 32);
+  locationInSpriteSheet = new Rectangle(6, 100, 20, 28);
 }
 
 Enemy::~Enemy() {

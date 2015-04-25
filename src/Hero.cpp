@@ -12,10 +12,10 @@ Hero::Hero() {
     std::cout << "Image not loaded";
   }
   startingLocation = new Rectangle(0, 0, 0, 0);
-  locationInSpriteSheet = new Rectangle(0, 136, 24, 24);
+  locationInSpriteSheet = new Rectangle(4, 137, 16, 22);
   boundingBox = new Rectangle(
-    locationInSpriteSheet->getX() + 4,
-    locationInSpriteSheet->getY() + 1,
+    startingLocation->getX(),
+    startingLocation->getY(),
     16, 
     22
   );
@@ -45,8 +45,6 @@ void Hero::update(Map* map) {
     
   if(state[SDL_SCANCODE_RIGHT] && canMoveRight(map)) 
     setBBx(getBBx() + 1);
-
-  std::cout << "x: " << getBBx() << ", y: " << getBBy() << '\n';
 }
 
 void Hero::draw(Map* map) {
