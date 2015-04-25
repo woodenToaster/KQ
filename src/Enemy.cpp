@@ -6,7 +6,12 @@ Enemy::Enemy() {
 	
   image = IMG_Load("./data/billy.png");
   startingLocation = new Rectangle(Map::SCREEN_WIDTH - 32, Map::SCREEN_HEIGHT - 32, 32, 32);
-  boundingBox = new Rectangle(6, 4, 20, 28);
+  boundingBox = new Rectangle(
+    startingLocation->getX() + 6,
+    startingLocation->getY() + 4, 
+    20, 
+    28
+  );
   locationInSpriteSheet = new Rectangle(0, 96, 32, 32);
 }
 
@@ -14,6 +19,8 @@ Enemy::~Enemy() {
 	
   SDL_FreeSurface(image);
   delete startingLocation;
+  delete boundingBox;
+  delete locationInSpriteSheet;
 }
 
 //TODO: Normalize speed for player and enemy
@@ -25,24 +32,20 @@ void Enemy::update(Map* map) {
   int heroX = map->getHero()->getBBx();
   int heroY = map->getHero()->getBBy();
 
-  if(heroX < getBBx()) {
-    if(canMoveLeft(map))
-      setBBx(getBBx() - 1);
+  if(heroX < getBBx() && canMoveLeft(map)) {
+    setBBx(getBBx() - 1);
   }
 
-  if(heroX > getBBx()) {
-    if(canMoveRight(map))
-      setBBx(getBBx() + 1);
+  if(heroX > getBBx() && canMoveRight(map)) {
+    setBBx(getBBx() + 1);
   }
 
-  if(heroY < getBBy()) {
-    if(canMoveUp(map))
-      setBBy(getBBy() - 1);
+  if(heroY < getBBy() && canMoveUp(map)) {
+    setBBy(getBBy() - 1);
   }
 
-  if(heroY > getBBy()) {
-    if(canMoveDown(map))
-      setBBy(getBBy() + 1);
+  if(heroY > getBBy() && canMoveDown(map)) {
+    setBBy(getBBy() + 1);
   }
 }
 
@@ -51,6 +54,6 @@ void Enemy::draw(Map* map) {
     image,
     locationInSpriteSheet->getInternalRect(), 
     map->getMapSurface(), 
-    startingLocation->getInternalRect()
+    boundingBox->getInternalRect()
   );
 }

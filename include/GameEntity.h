@@ -15,6 +15,7 @@ public:
   Rectangle* getStartingLocation();
   SDL_Surface* getImage();
   Rectangle* getBoundingBox();
+  Rectangle* getLocationInSpriteSheet();
 
   int getBBx();
   int getBBy();

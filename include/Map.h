@@ -2,6 +2,7 @@
 #define KQ_MAP_H
 
 #include <vector>
+#include "Enemy.h"
 #include "Hero.h"
 #include "Rectangle.h"
 #include "SDL.h"
@@ -27,7 +28,10 @@ public:
 
   SDL_Surface* getMapSurface();
 
-  Hero* getHero();
+  Hero* getHero() const;
+
+  void putHeroOnMap(Hero* hero);
+  void putEnemyOnMap(Enemy* enemy);
 
   void makeTiles();
   void makeObstructions();

@@ -19,11 +19,32 @@ SDL_Surface* Map::getMapSurface() {
   return mapSurface;
 }
 
-Hero* Map::getHero() {
+Hero* Map::getHero() const {
   return hero;
 }
 
+void Map::putHeroOnMap(Hero* hero) {
+  
+  SDL_BlitSurface(
+    hero->getImage(),
+    hero->getLocationInSpriteSheet()->getInternalRect(), 
+    mapSurface, 
+    hero->getStartingLocation()->getInternalRect()
+  );
+}
+
+void Map::putEnemyOnMap(Enemy* enemy) {
+  
+  SDL_BlitSurface(
+    enemy->getImage(),
+    enemy->getLocationInSpriteSheet()->getInternalRect(), 
+    mapSurface, 
+    enemy->getStartingLocation()->getInternalRect()
+  );
+}
+
 bool Map::upIsObstruction(Rectangle* location) {
+  
   for(obstruction o : obstructions) {
     int x = location->getX();
     int y = location->getY() - 1;
@@ -38,6 +59,7 @@ bool Map::upIsObstruction(Rectangle* location) {
 }
 
 bool Map::downIsObstruction(Rectangle* location) {
+  
   for(obstruction o : obstructions) {
     int x = location->getX();
     int y = location->getY();
@@ -52,6 +74,7 @@ bool Map::downIsObstruction(Rectangle* location) {
 }
 
 bool Map::leftIsObstruction(Rectangle* location) {
+  
   for(obstruction o : obstructions) {
     int x = location->getX() - 1;
     int y = location->getY();
@@ -66,6 +89,7 @@ bool Map::leftIsObstruction(Rectangle* location) {
 }
 
 bool Map::rightIsObstruction(Rectangle* location) {
+  
   for(obstruction o : obstructions) {
     int x = location->getX();
     int y = location->getY();
@@ -114,7 +138,11 @@ void Map::drawTiles() {
 }
 
 void Map::drawTile(tile* t) {
-  SDL_FillRect(t->surface, t->location->getInternalRect(), SDL_MapRGB(t->surface->format, 0, 255, 0));
+  SDL_FillRect(
+    t->surface, 
+    t->location->getInternalRect(), 
+    SDL_MapRGB(t->surface->format, 0, 255, 0)
+  );
   SDL_BlitSurface(t->surface, NULL, mapSurface, t->location->getInternalRect());
 }
 

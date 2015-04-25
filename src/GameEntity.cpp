@@ -12,21 +12,10 @@ SDL_Surface* GameEntity::getImage() {
 Rectangle* GameEntity::getBoundingBox() {
   return boundingBox;
 }
-// int GameEntity::getX() {
-//   return location->getInternalRect()->x;
-// }
 
-// int GameEntity::getY() {
-//   return location->getInternalRect()->y;
-// }
-
-// int GameEntity::getWidth() {
-//   return location->getInternalRect()->w;
-// }
-
-// int GameEntity::getHeight() {
-//   return location->getInternalRect()->h;
-// }
+Rectangle* GameEntity::getLocationInSpriteSheet() {
+  return locationInSpriteSheet;
+}
 
 int GameEntity::getBBx() {
   return boundingBox->getX();
@@ -43,14 +32,6 @@ int GameEntity::getBBw() {
 int GameEntity::getBBh() {
   return boundingBox->getHeight();
 }
-
-// void GameEntity::setX(int newX) {
-//   location->getInternalRect()->x = newX;
-// }
-
-// void GameEntity::setY(int newY) {
-//   location->getInternalRect()->y = newY;
-// }
 
 void GameEntity::setBBx(int newX) {
   boundingBox->setX(newX);
