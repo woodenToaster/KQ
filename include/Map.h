@@ -12,6 +12,8 @@ public:
   static const int SCREEN_WIDTH = 320;
   static const int SCREEN_HEIGHT = 240;
   static const int TILE_SIZE = 8;
+  static const int NUM_X_TILES = SCREEN_WIDTH / TILE_SIZE;
+  static const int NUM_Y_TILES = SCREEN_HEIGHT / TILE_SIZE;
 
   struct tile {
     SDL_Surface* surface;

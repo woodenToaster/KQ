@@ -102,7 +102,7 @@ bool keyPressedIsEscape(SDL_Event* event) {
 void update(SDL_Window* window, Map* map, Hero* hero, Enemy* enemy) {
 
   hero->update(map);
-  enemy->update(map);
+  //enemy->update(map);
 }
 
 void drawWorld(SDL_Window* window, Map* map, Hero* hero, Enemy* enemy) {
