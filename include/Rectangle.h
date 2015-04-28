@@ -6,6 +6,7 @@
 class Rectangle {
 public:
   Rectangle(int x, int y, int w, int h);
+  Rectangle(Rectangle* other);
   ~Rectangle();
 
   SDL_Rect* getInternalRect();

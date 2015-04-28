@@ -65,6 +65,22 @@ bool GameEntity::canMoveRight(Map* map) {
   return rightIsInMap(map) && !map->rightIsObstruction(boundingBox); 
 }
 
+bool GameEntity::canMoveUpLeft(Map* map) {
+  return upLeftIsInMap(map) && !map->upLeftIsObstruction(boundingBox);
+}
+
+bool GameEntity::canMoveUpRight(Map* map) {
+  return upRightIsInMap(map) && !map->upRightIsObstruction(boundingBox);
+}
+
+bool GameEntity::canMoveDownLeft(Map* map) {
+  return downLeftIsInMap(map) && !map->downLeftIsObstruction(boundingBox);
+}
+
+bool GameEntity::canMoveDownRight(Map* map) {
+  return downRightIsInMap(map) && !map->downRightIsObstruction(boundingBox);
+}
+
 bool GameEntity::upIsInMap(Map* map) {
   return getBBy() > map->getMapSurface()->clip_rect.y;
 }
@@ -81,4 +97,19 @@ bool GameEntity::rightIsInMap(Map* map) {
   return (getBBx() + getBBw()) < (map->getMapSurface()->clip_rect.x + map->getMapSurface()->clip_rect.w);
 }
 
+bool GameEntity::upLeftIsInMap(Map* map) {
+  return leftIsInMap(map) && upIsInMap(map);
+}
+
+bool GameEntity::upRightIsInMap(Map* map) {
+  return rightIsInMap(map) && upIsInMap(map);
+}
+
+bool GameEntity::downLeftIsInMap(Map* map) {
+  return leftIsInMap(map) && downIsInMap(map);
+}
+
+bool GameEntity::downRightIsInMap(Map* map) {
+  return downIsInMap(map) && rightIsInMap(map);
+}
 

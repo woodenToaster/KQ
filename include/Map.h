@@ -47,10 +47,17 @@ public:
   void destroyTiles();
   void destroyObstructions();
 
+  bool isObstruction(Rectangle* destination);
+
   bool upIsObstruction(Rectangle* location);
   bool downIsObstruction(Rectangle* location);
   bool leftIsObstruction(Rectangle* location);
   bool rightIsObstruction(Rectangle* location);
+
+  bool upLeftIsObstruction(Rectangle* location);
+  bool upRightIsObstruction(Rectangle* location);
+  bool downLeftIsObstruction(Rectangle* location);
+  bool downRightIsObstruction(Rectangle* location);
 
 private:
   std::vector<tile> tiles;

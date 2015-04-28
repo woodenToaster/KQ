@@ -70,28 +70,69 @@ void Hero::update(Map* map) {
   const Uint8* state = SDL_GetKeyboardState(NULL);
   uint16_t direction_mask = 0x0000;
 
-  if(state[SDL_SCANCODE_UP] && canMoveUp(map)) {
-    setBBy(getBBy() - 1);
+  if(state[SDL_SCANCODE_UP]) 
     direction_mask |= 0x0002;
-  }
     
-  if(state[SDL_SCANCODE_DOWN] && canMoveDown(map)) {
-    setBBy(getBBy() + 1);
+  if(state[SDL_SCANCODE_DOWN]) 
     direction_mask |= 0x0008;
-  }
     
-  if(state[SDL_SCANCODE_LEFT] && canMoveLeft(map)) {
-    setBBx(getBBx() - 1);
+  if(state[SDL_SCANCODE_LEFT]) 
     direction_mask |= 0x0004;
-  }
     
-  if(state[SDL_SCANCODE_RIGHT] && canMoveRight(map)) {
-    setBBx(getBBx() + 1);
+  if(state[SDL_SCANCODE_RIGHT]) 
     direction_mask |= 0x0001;
-  }
 
-  if(direction_values[direction_mask] >= 0)
-    facing = direction_values[direction_mask];
+  int direction_value = direction_values[direction_mask];
+
+  if(direction_value >= 0) {
+    
+    facing = direction_value;
+
+    switch(direction_value) {
+      case 0: // right
+        if(canMoveRight(map))
+          setBBx(getBBx() + 1);
+        break;
+      case 1: // right + up
+        if(canMoveUpRight(map)) {
+          setBBx(getBBx() + 1);
+          setBBy(getBBy() - 1);
+        }
+        break;
+      case 2: // up 
+        if(canMoveUp(map))
+          setBBy(getBBy() - 1);
+        break;
+      case 3: // left + up
+        if(canMoveUpLeft(map)) {
+          setBBx(getBBx() - 1);
+          setBBy(getBBy() - 1);
+        }
+        break;
+      case 4: // left
+        if(canMoveLeft(map)) 
+          setBBx(getBBx() - 1);
+        break;
+      case 5: // down + left
+        if(canMoveDownLeft(map)) {
+          setBBx(getBBx() - 1);
+          setBBy(getBBy() + 1);
+        }
+        break;
+      case 6: // down
+        if(canMoveDown(map))
+          setBBy(getBBy() + 1);
+        break;
+      case 7: // down + right
+        if(canMoveDownRight(map)) {
+          setBBy(getBBy() + 1);
+          setBBx(getBBx() + 1);
+        }
+        break;
+      default:
+        break;
+    }
+  }
 }
 
 void Hero::draw(Map* map) {

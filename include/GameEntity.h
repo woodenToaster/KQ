@@ -32,10 +32,20 @@ public:
   bool canMoveLeft(Map* map);
   bool canMoveRight(Map* map);
 
+  bool canMoveUpLeft(Map* map);
+  bool canMoveUpRight(Map* map);
+  bool canMoveDownLeft(Map* map);
+  bool canMoveDownRight(Map* map);
+
   bool upIsInMap(Map* map);
   bool downIsInMap(Map* map);
   bool leftIsInMap(Map* map);
   bool rightIsInMap(Map* map);
+
+  bool upLeftIsInMap(Map* map);
+  bool upRightIsInMap(Map* map);
+  bool downLeftIsInMap(Map* map);
+  bool downRightIsInMap(Map* map);
 
 protected:
   SDL_Surface* image; 

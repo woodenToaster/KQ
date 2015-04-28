@@ -45,56 +45,78 @@ void Map::putEnemyOnMap(Enemy* enemy) {
 
 bool Map::upIsObstruction(Rectangle* location) {
   
-  for(obstruction o : obstructions) {
-    int x = location->getX();
-    int y = location->getY() - 1;
-    int w = location->getWidth();
-    int h = location->getHeight();
+  Rectangle destination(location);
+  destination.setY(destination.getY() - 1);
 
-    Rectangle dest(x, y, w, h);
-    if(dest.overlaps(o.location->getInternalRect()))
-      return true;
-  }
-  return false;
+  return isObstruction(&destination);
 }
 
 bool Map::downIsObstruction(Rectangle* location) {
   
-  for(obstruction o : obstructions) {
-    int x = location->getX();
-    int y = location->getY();
-    int w = location->getWidth();
-    int h = location->getHeight() + 1;
+  Rectangle destination(location);
+  destination.setHeight(destination.getHeight() + 1);
 
-    Rectangle newDest(x, y, w, h);
-    if(newDest.overlaps(o.location->getInternalRect())) 
-      return true;
-  }
-  return false;
+  return isObstruction(&destination);
 }
 
 bool Map::leftIsObstruction(Rectangle* location) {
   
-  for(obstruction o : obstructions) {
-    int x = location->getX() - 1;
-    int y = location->getY();
-    int w = location->getWidth();
-    int h = location->getHeight();
+  Rectangle destination(location);
+  destination.setX(destination.getX() - 1);
 
-    Rectangle newDest(x, y, w, h);
-    if(newDest.overlaps(o.location->getInternalRect()))
-      return true;
-  }
-  return false;
+  return isObstruction(&destination);
 }
 
 bool Map::rightIsObstruction(Rectangle* location) {
   
+  Rectangle destination(location);
+  destination.setWidth(destination.getWidth() + 1);
+
+  return isObstruction(&destination);
+}
+
+bool Map::upLeftIsObstruction(Rectangle* location) {
+  
+  Rectangle destination(location);
+  destination.setX(destination.getX() - 1);
+  destination.setY(destination.getY() - 1);
+
+  return isObstruction(&destination);
+}
+
+bool Map::upRightIsObstruction(Rectangle* location) {
+  
+  Rectangle destination(location);
+  destination.setY(destination.getY() - 1);
+  destination.setWidth(destination.getWidth() + 1);
+
+  return isObstruction(&destination);
+}
+
+bool Map::downLeftIsObstruction(Rectangle* location) {
+  
+  Rectangle destination(location);
+  destination.setX(destination.getX() - 1);
+  destination.setHeight(destination.getHeight() + 1);
+
+  return isObstruction(&destination);
+}
+
+bool Map::downRightIsObstruction(Rectangle* location) {
+  
+  Rectangle destination(location);
+  destination.setWidth(destination.getWidth() + 1);
+  destination.setHeight(destination.getHeight() + 1);
+
+  return isObstruction(&destination);
+}
+
+bool Map::isObstruction(Rectangle* destination) {
   for(obstruction o : obstructions) {
-    int x = location->getX();
-    int y = location->getY();
-    int w = location->getWidth() + 1;
-    int h = location->getHeight();
+    int x = destination->getX();
+    int y = destination->getY();
+    int w = destination->getWidth();
+    int h = destination->getHeight();
 
     Rectangle newDest(x, y, w, h);
     if(newDest.overlaps(o.location->getInternalRect()))
@@ -102,7 +124,6 @@ bool Map::rightIsObstruction(Rectangle* location) {
   }
   return false;
 }
-
 
 void Map::makeTiles() {
   

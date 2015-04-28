@@ -5,6 +5,16 @@ Rectangle::Rectangle(int x, int y, int w, int h) {
   internal_rect = new SDL_Rect{x, y, w, h};
 }
 
+Rectangle::Rectangle(Rectangle* other) {
+  
+  int x = other->getX();
+  int y = other->getY();
+  int w = other->getWidth();
+  int h = other->getHeight();
+
+  internal_rect = new SDL_Rect{x, y, w, h};
+}
+
 Rectangle::~Rectangle() {
   delete internal_rect;
 }
