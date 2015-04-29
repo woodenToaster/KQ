@@ -30,9 +30,10 @@ const int Hero::direction_values[16] = {
   -1  // down + left + right + up: stop
 };
 
-Hero::Hero(): facing(DOWN) {
+Hero::Hero(): facing(DOWN), attacking(false) {
 	
   image = IMG_Load("./data/walking.tunic.png");
+  weaponImage = SDL_CreateRGBSurface(0, 8, 16, 32, 0, 0, 0, 0);
   startingLocation = new Rectangle(0, 0, 0, 0);
   locationInSpriteSheet = new Rectangle(4, 137, 16, 22);
   boundingBox = new Rectangle(
@@ -41,6 +42,13 @@ Hero::Hero(): facing(DOWN) {
     16, 
     22
   );
+  weaponBoundingBox = new Rectangle(
+    boundingBox->getX(),
+    boundingBox->getY(),
+    8,
+    16
+  );
+
   direction_images[UP] = new Rectangle(4, 41, 16, 22);
   direction_images[DOWN] = new Rectangle(4, 137, 16, 22);
   direction_images[LEFT] = new Rectangle(5, 105, 16, 23);
@@ -84,6 +92,14 @@ void Hero::update(Map* map) {
 
   int direction_value = direction_values[direction_mask];
 
+  if(state[SDL_SCANCODE_SPACE]) {
+    attacking = true;
+    drawWeapon(map);
+  }
+
+  if(!state[SDL_SCANCODE_SPACE]) 
+    attacking = false;
+  
   if(direction_value >= 0) {
     
     facing = direction_value;
@@ -144,6 +160,34 @@ void Hero::draw(Map* map) {
   );
 }
 
+void Hero::drawWeapon(Map* map) {
+  switch(facing) {
+    case 0:
+      weaponBoundingBox->setX(boundingBox->getX() + boundingBox->getWidth());
+      weaponBoundingBox->setY((boundingBox->getY() + boundingBox->getHeight()) / 2);
+      weaponBoundingBox->setWidth(24);
+      weaponBoundingBox->setHeight(8);
+      SDL_FillRect(weaponImage, NULL, SDL_MapRGB(weaponImage->format, 127, 127, 127));
+      if(attacking)
+        SDL_BlitSurface(weaponImage, NULL, map->getMapSurface(), weaponBoundingBox->getInternalRect());
+      break;
+    case  2:
+      
+      SDL_BlitSurface(weaponImage, NULL, map->getMapSurface(), weaponBoundingBox->getInternalRect());
+      break;
+    case  4:
+      
+      SDL_BlitSurface(weaponImage, NULL, map->getMapSurface(), weaponBoundingBox->getInternalRect());
+      break;
+    case  6:
+      
+      SDL_BlitSurface(weaponImage, NULL, map->getMapSurface(), weaponBoundingBox->getInternalRect());
+      break;
+    default:
+      break;
+  }
+}
+ 
 Rectangle* Hero::getFacingDirection() const {
   return direction_images[(int)facing];
 }

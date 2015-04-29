@@ -23,6 +23,9 @@ public:
   void updateBoundingBox();
   void draw(Map* map);
 
+  void drawWeapon(Map* map);
+  void clearWeapon();
+
   Rectangle* getFacingDirection() const;
 
 private:
@@ -30,7 +33,11 @@ private:
   static const int direction_values[16];
 
   uint16_t facing;
+  bool attacking;
   Rectangle* direction_images[8];
+
+  SDL_Surface* weaponImage;
+  Rectangle* weaponBoundingBox;
 
 };
 
