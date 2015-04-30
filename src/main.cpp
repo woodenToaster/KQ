@@ -24,7 +24,7 @@ void drawWorld(SDL_Window* window, Map* map, Hero* hero, Enemy* enemy);
 
 int main(int argc, char** argv) {
   
-  SDL_Init(SDL_INIT_VIDEO);
+  SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
 
   SDL_Window* window;
 
@@ -122,6 +122,8 @@ void drawWorld(SDL_Window* window, Map* map, Hero* hero, Enemy* enemy) {
   map->drawObstructions();
   
   hero->draw(map);
+  if(hero->isAttacking())
+    hero->drawWeapon(map);
   enemy->draw(map);
 
   SDL_UpdateWindowSurface(window);

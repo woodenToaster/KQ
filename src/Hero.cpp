@@ -33,7 +33,7 @@ const int Hero::direction_values[16] = {
 Hero::Hero(): facing(DOWN), attacking(false) {
 	
   image = IMG_Load("./data/walking.tunic.png");
-  weaponImage = SDL_CreateRGBSurface(0, 8, 16, 32, 0, 0, 0, 0);
+  weaponImage = SDL_CreateRGBSurface(0, 16, 16, 32, 0, 0, 0, 0);
   startingLocation = new Rectangle(0, 0, 0, 0);
   locationInSpriteSheet = new Rectangle(4, 137, 16, 22);
   boundingBox = new Rectangle(
@@ -153,38 +153,71 @@ void Hero::draw(Map* map) {
 }
 
 void Hero::attack(Map* map) {
-  drawWeapon(map);
+  attacking = true;
+  SDL_AddTimer(200, doneAttacking, this);
+}
+
+bool Hero::isAttacking() {
+  return attacking;
 }
 
 void Hero::drawWeapon(Map* map) {
   
-  switch((int)facing) {
-    case 0:
-      std::cout << facing << '\n';
+  Rectangle r{0, 0, 0, 0};
+
+  std::cout << boundingBox->getX() << ' ' << boundingBox->getY() << '\n';
+  switch(facing) {
+    case 0: // Right
       weaponBoundingBox->setX(boundingBox->getX() + boundingBox->getWidth());
-      weaponBoundingBox->setY((boundingBox->getY() + boundingBox->getHeight()) / 2);
-      weaponBoundingBox->setWidth(24);
-      weaponBoundingBox->setHeight(8);
+      weaponBoundingBox->setY(boundingBox->getY() + boundingBox->getHeight() / 2);
+      weaponBoundingBox->setWidth(16);
+      weaponBoundingBox->setHeight(4);
+      r.setWidth(16);
+      r.setHeight(4);
       SDL_FillRect(weaponImage, NULL, SDL_MapRGB(weaponImage->format, 127, 127, 127));
-      SDL_BlitSurface(weaponImage, NULL, map->getMapSurface(), weaponBoundingBox->getInternalRect());
+      SDL_BlitSurface(weaponImage, r.getInternalRect(), map->getMapSurface(), weaponBoundingBox->getInternalRect());
       break;
-    case  2:
-      
-      SDL_BlitSurface(weaponImage, NULL, map->getMapSurface(), weaponBoundingBox->getInternalRect());
+    case  2: // Up
+      weaponBoundingBox->setX(boundingBox->getX() + boundingBox->getWidth() / 2);
+      weaponBoundingBox->setY(boundingBox->getY() - 16);
+      weaponBoundingBox->setWidth(4);
+      weaponBoundingBox->setHeight(16);
+      r.setWidth(4);
+      r.setHeight(16);
+      SDL_FillRect(weaponImage, NULL, SDL_MapRGB(weaponImage->format, 127, 127, 127));
+      SDL_BlitSurface(weaponImage, r.getInternalRect(), map->getMapSurface(), weaponBoundingBox->getInternalRect());
       break;
-    case  4:
-      
-      SDL_BlitSurface(weaponImage, NULL, map->getMapSurface(), weaponBoundingBox->getInternalRect());
+    case  4: // Left
+      weaponBoundingBox->setX(boundingBox->getX() - 16);
+      weaponBoundingBox->setY(boundingBox->getY() + boundingBox->getHeight() / 2);
+      weaponBoundingBox->setWidth(16);
+      weaponBoundingBox->setHeight(4);
+      r.setWidth(16);
+      r.setHeight(4);
+      SDL_FillRect(weaponImage, NULL, SDL_MapRGB(weaponImage->format, 127, 127, 127));
+      SDL_BlitSurface(weaponImage, r.getInternalRect(), map->getMapSurface(), weaponBoundingBox->getInternalRect());
       break;
-    case  6:
-      
-      SDL_BlitSurface(weaponImage, NULL, map->getMapSurface(), weaponBoundingBox->getInternalRect());
+    case  6: // Down
+      weaponBoundingBox->setX(boundingBox->getX() + boundingBox->getWidth() / 2);
+      weaponBoundingBox->setY(boundingBox->getY() + boundingBox->getHeight());
+      weaponBoundingBox->setWidth(4);
+      weaponBoundingBox->setHeight(16);
+      r.setWidth(4);
+      r.setHeight(16);
+      SDL_FillRect(weaponImage, NULL, SDL_MapRGB(weaponImage->format, 127, 127, 127));
+      SDL_BlitSurface(weaponImage, r.getInternalRect(), map->getMapSurface(), weaponBoundingBox->getInternalRect());
       break;
     default:
       break;
   }
 }
- 
+
+ Uint32 Hero::doneAttacking(Uint32 interval, void* heroInstance) {
+  Hero* h = (Hero*) heroInstance;
+  h->attacking = false;
+  return 0;
+}
+
 Rectangle* Hero::getFacingDirection() const {
   return direction_images[(int)facing];
 }

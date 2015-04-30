@@ -27,6 +27,10 @@ public:
   void drawWeapon(Map* map);
   void clearWeapon();
 
+  bool isAttacking();
+
+  static Uint32 doneAttacking(Uint32 interval, void* heroInstance);
+
   Rectangle* getFacingDirection() const;
 
 private:
