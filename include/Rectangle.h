@@ -5,6 +5,7 @@
 
 class Rectangle {
 public:
+  Rectangle();
   Rectangle(int x, int y, int w, int h);
   Rectangle(Rectangle* other);
   ~Rectangle();

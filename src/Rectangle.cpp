@@ -1,5 +1,9 @@
 #include "Rectangle.h"
 
+Rectangle::Rectangle() {
+  internal_rect = new SDL_Rect{0, 0, 0, 0};
+}
+
 Rectangle::Rectangle(int x, int y, int w, int h) {
 	
   internal_rect = new SDL_Rect{x, y, w, h};

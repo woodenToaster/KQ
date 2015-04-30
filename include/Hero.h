@@ -27,6 +27,15 @@ public:
   void drawWeapon(Map* map);
   void clearWeapon();
 
+  void drawSwordRight(Map* map);
+  void drawSwordLeft(Map* map);
+  void drawSwordUp(Map* map);
+  void drawSwordDown(Map* map);
+  void drawSword(Rectangle& dest, Map* map);
+
+  Rectangle getHorizontalSword();
+  Rectangle getVerticalSword();
+
   bool isAttacking();
 
   static Uint32 doneAttacking(Uint32 interval, void* heroInstance);
