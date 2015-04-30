@@ -92,14 +92,6 @@ void Hero::update(Map* map) {
 
   int direction_value = direction_values[direction_mask];
 
-  if(state[SDL_SCANCODE_SPACE]) {
-    attacking = true;
-    drawWeapon(map);
-  }
-
-  if(!state[SDL_SCANCODE_SPACE]) 
-    attacking = false;
-  
   if(direction_value >= 0) {
     
     facing = direction_value;
@@ -160,16 +152,21 @@ void Hero::draw(Map* map) {
   );
 }
 
+void Hero::attack(Map* map) {
+  drawWeapon(map);
+}
+
 void Hero::drawWeapon(Map* map) {
-  switch(facing) {
+  
+  switch((int)facing) {
     case 0:
+      std::cout << facing << '\n';
       weaponBoundingBox->setX(boundingBox->getX() + boundingBox->getWidth());
       weaponBoundingBox->setY((boundingBox->getY() + boundingBox->getHeight()) / 2);
       weaponBoundingBox->setWidth(24);
       weaponBoundingBox->setHeight(8);
       SDL_FillRect(weaponImage, NULL, SDL_MapRGB(weaponImage->format, 127, 127, 127));
-      if(attacking)
-        SDL_BlitSurface(weaponImage, NULL, map->getMapSurface(), weaponBoundingBox->getInternalRect());
+      SDL_BlitSurface(weaponImage, NULL, map->getMapSurface(), weaponBoundingBox->getInternalRect());
       break;
     case  2:
       

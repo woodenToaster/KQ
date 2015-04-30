@@ -23,6 +23,7 @@ public:
   void updateBoundingBox();
   void draw(Map* map);
 
+  void attack(Map* map);
   void drawWeapon(Map* map);
   void clearWeapon();
 

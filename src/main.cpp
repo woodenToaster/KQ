@@ -17,6 +17,8 @@ bool isKeyboardEvent(SDL_Event* event);
 bool keyPressedIsEscape(SDL_Event* event);
 bool inputDetected();
 
+bool spacebarPressed(SDL_Event* event);
+
 void update(SDL_Window* window, Map* map, Hero* hero, Enemy* enemy);
 void drawWorld(SDL_Window* window, Map* map, Hero* hero, Enemy* enemy);
 
@@ -48,8 +50,11 @@ int main(int argc, char** argv) {
   while(!quit) {
     Uint32 start = SDL_GetTicks();
 
-    if(SDL_PollEvent(&event)) 
+    if(SDL_PollEvent(&event)) {
       quit = shouldClose(&event);
+      if(spacebarPressed(&event))
+        hero.attack(&map);
+    }
     
     if(hero.getBoundingBox()->overlaps(enemy.getBoundingBox()->getInternalRect()))
       break;
@@ -97,6 +102,12 @@ bool isKeyboardEvent(SDL_Event* event) {
 
 bool keyPressedIsEscape(SDL_Event* event) {
   return event->key.keysym.sym == SDLK_ESCAPE;
+}
+
+bool spacebarPressed(SDL_Event* event) {
+
+  return event->type == SDL_KEYDOWN &&
+         event->key.keysym.sym == SDLK_SPACE;
 }
 
 void update(SDL_Window* window, Map* map, Hero* hero, Enemy* enemy) {
