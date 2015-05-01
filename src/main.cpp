@@ -113,7 +113,10 @@ bool spacebarPressed(SDL_Event* event) {
 void update(SDL_Window* window, Map* map, Hero* hero, Enemy* enemy) {
 
   hero->update(map);
-  //enemy->update(map);
+  if(hero->getWeaponBoundingBox()->overlaps(enemy->getBoundingBox()->getInternalRect()))
+    enemy->notifyHit();
+  if(enemy->isAlive())
+    enemy->update(map);
 }
 
 void drawWorld(SDL_Window* window, Map* map, Hero* hero, Enemy* enemy) {

@@ -2,7 +2,7 @@
 #include "Map.h"
 #include "SDL_image.h"
 
-Enemy::Enemy() {
+Enemy::Enemy(): alive(true) {
 	
   image = IMG_Load("./data/billy.png");
   startingLocation = new Rectangle(Map::SCREEN_WIDTH - 32, Map::SCREEN_HEIGHT - 32, 32, 32);
@@ -26,9 +26,6 @@ Enemy::~Enemy() {
 //TODO: Normalize speed for player and enemy
 void Enemy::update(Map* map) {
 	
-  // point heroCenter = center(heroLocation);
-  // point enemyCenter = center(enemyDest);
-
   int heroX = map->getHero()->getBBx();
   int heroY = map->getHero()->getBBy();
 
@@ -56,4 +53,12 @@ void Enemy::draw(Map* map) {
     map->getMapSurface(), 
     boundingBox->getInternalRect()
   );
+}
+
+void Enemy::notifyHit() {
+  alive = false;
+}
+
+bool Enemy::isAlive() const {
+  return alive;
 }

@@ -157,7 +157,7 @@ void Hero::attack(Map* map) {
   SDL_AddTimer(200, doneAttacking, this);
 }
 
-bool Hero::isAttacking() {
+bool Hero::isAttacking() const {
   return attacking;
 }
 
@@ -187,33 +187,33 @@ void Hero::drawSwordRight(Map* map) {
   weaponBoundingBox->setX(boundingBox->getX() + boundingBox->getWidth());
   weaponBoundingBox->setY(boundingBox->getY() + boundingBox->getHeight() / 2);
   Rectangle r = getHorizontalSword();
-  drawSword(&r, map);
+  drawSword(r, map);
 }
 
 void Hero::drawSwordLeft(Map* map) {
   weaponBoundingBox->setX(boundingBox->getX() - 16);
   weaponBoundingBox->setY(boundingBox->getY() + boundingBox->getHeight() / 2);
   Rectangle r = getHorizontalSword();
-  drawSword(&r, map);
+  drawSword(r, map);
 }
 
 void Hero::drawSwordUp(Map* map) {
   weaponBoundingBox->setX(boundingBox->getX() + boundingBox->getWidth() / 2);
   weaponBoundingBox->setY(boundingBox->getY() - 16);
   Rectangle r = getVerticalSword();
-  drawSword(&r, map);
+  drawSword(r, map);
 }
 
 void Hero::drawSwordDown(Map* map) {
   weaponBoundingBox->setX(boundingBox->getX() + boundingBox->getWidth() / 2);
   weaponBoundingBox->setY(boundingBox->getY() + boundingBox->getHeight());
   Rectangle r = getVerticalSword();
-  drawSword(&r, map);
+  drawSword(r, map);
 }
 
 void Hero::drawSword(Rectangle& dest, Map* map) {
   SDL_FillRect(weaponImage, NULL, SDL_MapRGB(weaponImage->format, 127, 127, 127));
-  SDL_BlitSurface(weaponImage, dest, map->getMapSurface(), weaponBoundingBox->getInternalRect());
+  SDL_BlitSurface(weaponImage, dest.getInternalRect(), map->getMapSurface(), weaponBoundingBox->getInternalRect());
 }
 
 Uint32 Hero::doneAttacking(Uint32 interval, void* heroInstance) {
@@ -236,6 +236,10 @@ Rectangle Hero::getVerticalSword() {
   Rectangle r{0, 0, 4, 16};
   
   return r;
+}
+
+Rectangle* Hero::getWeaponBoundingBox() const {
+  return weaponBoundingBox;
 }
 
 Rectangle* Hero::getFacingDirection() const {

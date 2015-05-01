@@ -4,7 +4,7 @@
 #include "GameEntity.h"
 
 class Hero : public GameEntity {
-public:
+ public:
   Hero();
   ~Hero();
 
@@ -36,13 +36,15 @@ public:
   Rectangle getHorizontalSword();
   Rectangle getVerticalSword();
 
-  bool isAttacking();
+  Rectangle* getWeaponBoundingBox() const;
+
+  bool isAttacking() const;
 
   static Uint32 doneAttacking(Uint32 interval, void* heroInstance);
 
   Rectangle* getFacingDirection() const;
 
-private:
+ private:
   static const uint16_t direction_masks[4];
   static const int direction_values[16];
 

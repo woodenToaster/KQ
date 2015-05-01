@@ -4,15 +4,18 @@
 #include "GameEntity.h"
 
 class Enemy : public GameEntity {
-public:
+ public:
   Enemy();
   ~Enemy();
 
   void update(Map* map);
   void draw(Map* map);
+
+  void notifyHit();
+  bool isAlive() const;
   
-private:
-  
+ private:
+  bool alive;
 };
 
 #endif
