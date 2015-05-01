@@ -1,5 +1,12 @@
 #include "Map.h"
 #include "Hero.h"
+#include <cassert>
+#include <fstream>
+#include <iostream>
+
+const std::regex Map::tileRegex(R"(tile {[^}]*})");
+
+const std::regex Map::obstructionRegex(R"(obstruction {[^}]*})");
 
 Map::Map(SDL_Window* window, Hero* hero): hero(hero) {
 
@@ -123,6 +130,19 @@ bool Map::isObstruction(Rectangle* destination) {
       return true;
   }
   return false;
+}
+
+void Map::loadTileDataFromFile(std::string& filename) {
+
+  std::string path = "./data/maps/";
+  std::string fullFilePath = path + filename;
+  std::ifstream mapFile;
+  mapFile.open(fullFilePath);
+  
+  //TODO(Chris): figure out assertion pattern for debugging
+  assert(mapFile != nullptr);
+
+  std::smatch matcher;
 }
 
 void Map::makeTiles() {

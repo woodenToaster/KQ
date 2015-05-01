@@ -4,7 +4,7 @@
 
 Enemy::Enemy(): alive(true) {
 	
-  image = IMG_Load("./data/billy.png");
+  image = IMG_Load("./data/sprites/billy.png");
   startingLocation = new Rectangle(Map::SCREEN_WIDTH - 32, Map::SCREEN_HEIGHT - 32, 32, 32);
   boundingBox = new Rectangle(
     startingLocation->getX(),

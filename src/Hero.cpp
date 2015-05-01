@@ -32,7 +32,7 @@ const int Hero::direction_values[16] = {
 
 Hero::Hero(): facing(DOWN), attacking(false) {
 	
-  image = IMG_Load("./data/walking.tunic.png");
+  image = IMG_Load("./data/sprites/walking.tunic.png");
   weaponImage = SDL_CreateRGBSurface(0, 16, 16, 32, 0, 0, 0, 0);
   startingLocation = new Rectangle(0, 0, 0, 0);
   locationInSpriteSheet = new Rectangle(4, 137, 16, 22);

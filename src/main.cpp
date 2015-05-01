@@ -42,7 +42,8 @@ int main(int argc, char** argv) {
   Map map(window, &hero);
   map.putHeroOnMap(&hero);
   map.putEnemyOnMap(&enemy);
-
+  std::string mapFile = "1.dat";
+  map.loadTileDataFromFile(mapFile);
   SDL_Event event;
 
   bool quit = false;
