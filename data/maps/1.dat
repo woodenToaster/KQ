@@ -3,5 +3,9 @@ tile {
   y = 0,
   w = 8,
   h = 8,
-  image = "grassSurface"
+  surface = "grassSurface"
+}
+
+obstruction {
+  
 }

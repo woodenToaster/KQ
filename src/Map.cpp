@@ -3,10 +3,7 @@
 #include <cassert>
 #include <fstream>
 #include <iostream>
-
-const std::regex Map::tileRegex(R"(tile {[^}]*})");
-
-const std::regex Map::obstructionRegex(R"(obstruction {[^}]*})");
+#include <regex>
 
 Map::Map(SDL_Window* window, Hero* hero): hero(hero) {
 
@@ -138,11 +135,84 @@ void Map::loadTileDataFromFile(std::string& filename) {
   std::string fullFilePath = path + filename;
   std::ifstream mapFile;
   mapFile.open(fullFilePath);
-  
+
   //TODO(Chris): figure out assertion pattern for debugging
   assert(mapFile != nullptr);
 
-  std::smatch matcher;
+  std::regex tileBeginRegex("tile \\{");
+  std::regex obstructionBeginRegex("obstruction \\{");
+  std::regex endOfEntity("^\\}");
+  std::regex xValRegex("x = ([0-9]+)");
+  std::regex yValRegex("y = ([0-9]+)");
+  std::regex wValRegex("w = ([0-9]+)");
+  std::regex hValRegex("h = ([0-9]+)");
+  std::regex imageValRegex("image = \"([^\"]+)\"");
+
+  std::smatch smatcher;
+
+  bool processingTile = false;
+  bool processingObstruction = false;
+
+  std::string currentLine;
+
+  
+  // obstruction o;
+
+  int x, y, w, h;
+  std::string image;
+
+  while(std::getline(mapFile, currentLine)) {
+
+    tile t;
+
+    if(std::regex_match(currentLine, tileBeginRegex)) {
+      std::cout << "matched tile\n";
+      processingTile = true;
+    }
+
+    if(std::regex_match(currentLine, obstructionBeginRegex)) {
+      std::cout << "matched obstruction\n";
+      processingObstruction = true;
+    }
+
+    if(processingTile) {
+      if(std::regex_search(currentLine, smatcher, xValRegex)) {
+        std::cout << smatcher.str(1) << '\n';
+        x = stoi(smatcher.str(1));
+      }
+      else if(std::regex_search(currentLine, smatcher, yValRegex)) {
+        std::cout << smatcher.str(1) << '\n';
+        y = stoi(smatcher.str(1));
+      }
+      else if(std::regex_search(currentLine, smatcher, wValRegex)) {
+        std::cout << smatcher.str(1) << '\n';
+        w = stoi(smatcher.str(1));
+      }
+      else if(std::regex_search(currentLine, smatcher, hValRegex)) {
+        std::cout << smatcher.str(1) << '\n';
+        h = stoi(smatcher.str(1));
+      }
+      else if(std::regex_search(currentLine, smatcher, imageValRegex)) {
+        image = smatcher.str(1);
+      }
+    }
+
+    if((processingObstruction == true || processingTile == true) &&
+        std::regex_match(currentLine, endOfEntity)) {
+      
+      processingObstruction = false;
+      processingTile = false;
+
+      t.location = new Rectangle(x, y, w, h);
+      //t.surface
+      tiles.push_back(t);
+
+      std::cout << "end" << '\n';
+    }
+  }
+  std::cout << x << " " << y << " " << w << " " << h << image << '\n';
+  
+  mapFile.close();
 }
 
 void Map::makeTiles() {

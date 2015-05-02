@@ -8,7 +8,7 @@ WARNING_FLAGS = -O0 -Wall -Werror
 EXEC = kirpsquest
 
 
-CXX = g++
+CXX = /usr/bin/g++-4.9
 CPPFLAGS = -g $(WARNING_FLAGS) -I$(INCLUDE_DIR) `sdl2-config --cflags` -std=c++11
 LIBS = `sdl2-config --libs` -lSDL2_image 
 

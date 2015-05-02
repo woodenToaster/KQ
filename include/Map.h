@@ -1,7 +1,6 @@
 #ifndef KQ_MAP_H
 #define KQ_MAP_H
 
-#include <regex>
 #include <string>
 #include <vector>
 #include "Enemy.h"
@@ -72,8 +71,6 @@ private:
   //TODO: This is only temporary
   Hero* hero;
 
-  const static std::regex tileRegex;
-  const static std::regex obstructionRegex;
 };
 
 #endif
