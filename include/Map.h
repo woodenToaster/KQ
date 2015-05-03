@@ -1,6 +1,7 @@
 #ifndef KQ_MAP_H
 #define KQ_MAP_H
 
+#include <map>
 #include <string>
 #include <vector>
 #include "Enemy.h"
@@ -63,6 +64,8 @@ public:
   bool downRightIsObstruction(Rectangle* location);
 
 private:
+  static std::map<std::string, SDL_Surface*> tileImages;
+
   std::vector<tile> tiles;
   std::vector<obstruction> obstructions;
 

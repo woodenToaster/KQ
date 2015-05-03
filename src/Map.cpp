@@ -5,11 +5,17 @@
 #include <iostream>
 #include <regex>
 
+std::map<std::string, SDL_Surface*> Map::tileImages = {
+  
+  {"grassSurface", SDL_CreateRGBSurface(0, TILE_SIZE * 4, TILE_SIZE * 4, 32, 0, 0, 0, 0)},
+  {"boulder", SDL_CreateRGBSurface(0, TILE_SIZE * 4, TILE_SIZE * 4, 32, 0, 0, 0, 0)}
+};
+
 Map::Map(SDL_Window* window, Hero* hero): hero(hero) {
 
   mapSurface = SDL_GetWindowSurface(window);
-  makeTiles();
-  makeObstructions();
+  //makeTiles();
+  //makeObstructions();
 }
 
 Map::~Map() {
@@ -17,6 +23,10 @@ Map::~Map() {
   destroyTiles();
   destroyObstructions();
   SDL_FreeSurface(mapSurface);
+
+  for(auto iter : tileImages) {
+    SDL_FreeSurface(iter.second);
+  }
 }
 
 SDL_Surface* Map::getMapSurface() {
@@ -155,7 +165,6 @@ void Map::loadTileDataFromFile(std::string& filename) {
 
   std::string currentLine;
 
-  
   // obstruction o;
 
   int x, y, w, h;
@@ -165,36 +174,28 @@ void Map::loadTileDataFromFile(std::string& filename) {
 
     tile t;
 
-    if(std::regex_match(currentLine, tileBeginRegex)) {
-      std::cout << "matched tile\n";
+    if(std::regex_match(currentLine, tileBeginRegex)) 
       processingTile = true;
-    }
 
-    if(std::regex_match(currentLine, obstructionBeginRegex)) {
-      std::cout << "matched obstruction\n";
+    if(std::regex_match(currentLine, obstructionBeginRegex)) 
       processingObstruction = true;
-    }
-
+    
     if(processingTile) {
-      if(std::regex_search(currentLine, smatcher, xValRegex)) {
-        std::cout << smatcher.str(1) << '\n';
+      if(std::regex_search(currentLine, smatcher, xValRegex)) 
         x = stoi(smatcher.str(1));
-      }
-      else if(std::regex_search(currentLine, smatcher, yValRegex)) {
-        std::cout << smatcher.str(1) << '\n';
+      
+      else if(std::regex_search(currentLine, smatcher, yValRegex)) 
         y = stoi(smatcher.str(1));
-      }
-      else if(std::regex_search(currentLine, smatcher, wValRegex)) {
-        std::cout << smatcher.str(1) << '\n';
+      
+      else if(std::regex_search(currentLine, smatcher, wValRegex)) 
         w = stoi(smatcher.str(1));
-      }
-      else if(std::regex_search(currentLine, smatcher, hValRegex)) {
-        std::cout << smatcher.str(1) << '\n';
+      
+      else if(std::regex_search(currentLine, smatcher, hValRegex)) 
         h = stoi(smatcher.str(1));
-      }
-      else if(std::regex_search(currentLine, smatcher, imageValRegex)) {
+      
+      else if(std::regex_search(currentLine, smatcher, imageValRegex)) 
         image = smatcher.str(1);
-      }
+      
     }
 
     if((processingObstruction == true || processingTile == true) &&
@@ -204,13 +205,10 @@ void Map::loadTileDataFromFile(std::string& filename) {
       processingTile = false;
 
       t.location = new Rectangle(x, y, w, h);
-      //t.surface
+      t.surface = tileImages[image];
       tiles.push_back(t);
-
-      std::cout << "end" << '\n';
     }
   }
-  std::cout << x << " " << y << " " << w << " " << h << image << '\n';
   
   mapFile.close();
 }
