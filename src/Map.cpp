@@ -173,6 +173,7 @@ void Map::loadTileDataFromFile(std::string& filename) {
   while(std::getline(mapFile, currentLine)) {
 
     tile t;
+    obstruction o;
 
     if(std::regex_match(currentLine, tileBeginRegex)) 
       processingTile = true;
@@ -180,7 +181,7 @@ void Map::loadTileDataFromFile(std::string& filename) {
     if(std::regex_match(currentLine, obstructionBeginRegex)) 
       processingObstruction = true;
     
-    if(processingTile) {
+    if(processingTile || processingObstruction) {
       if(std::regex_search(currentLine, smatcher, xValRegex)) 
         x = stoi(smatcher.str(1));
       
@@ -201,12 +202,18 @@ void Map::loadTileDataFromFile(std::string& filename) {
     if((processingObstruction == true || processingTile == true) &&
         std::regex_match(currentLine, endOfEntity)) {
       
-      processingObstruction = false;
-      processingTile = false;
-
-      t.location = new Rectangle(x, y, w, h);
-      t.surface = tileImages[image];
-      tiles.push_back(t);
+      if(processingTile) {
+        t.location = new Rectangle(x, y, w, h);
+        t.surface = tileImages[image];
+        tiles.push_back(t);
+        processingTile = false;
+      }
+      else if(processingObstruction) {
+        o.location = new Rectangle(x, y, w, h);
+        o.surface = tileImages[image];
+        obstructions.push_back(o);
+        processingObstruction = false;
+      }
     }
   }
   

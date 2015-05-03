@@ -367,14 +367,6 @@ tile {
 }
 
 tile {
-  x = 192,
-  y = 128,
-  w = 32,
-  h = 32,
-  image = "grassSurface"
-}
-
-tile {
   x = 224,
   y = 128,
   w = 32,
@@ -447,14 +439,6 @@ tile {
 }
 
 tile {
-  x = 192,
-  y = 160,
-  w = 32,
-  h = 32,
-  image = "grassSurface"
-}
-
-tile {
   x = 224,
   y = 160,
   w = 32,
@@ -512,14 +496,6 @@ tile {
 
 tile {
   x = 128,
-  y = 192,
-  w = 32,
-  h = 32,
-  image = "grassSurface"
-}
-
-tile {
-  x = 160,
   y = 192,
   w = 32,
   h = 32,
@@ -637,3 +613,28 @@ tile {
   h = 16,
   image = "grassSurface"
 }
+
+obstruction {
+  x = 160,
+  y = 192,
+  w = 32,
+  h = 32,
+  image = "boulder"
+}
+
+obstruction {
+  x = 192,
+  y = 128,
+  w = 32,
+  h = 32,
+  image = "boulder"
+}
+
+obstruction {
+  x = 192,
+  y = 160,
+  w = 32,
+  h = 32,
+  image = "boulder"
+}
+
