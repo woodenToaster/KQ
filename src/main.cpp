@@ -19,6 +19,8 @@ bool inputDetected();
 
 bool spacebarPressed(SDL_Event* event);
 
+bool collided(Rectangle* r1, Rectangle* r2);
+
 void update(SDL_Window* window, Map* map, Hero* hero, Enemy* enemy);
 void drawWorld(SDL_Window* window, Map* map, Hero* hero, Enemy* enemy);
 
@@ -57,7 +59,7 @@ int main(int argc, char** argv) {
         hero.attack(&map);
     }
     
-    if(hero.getBoundingBox()->overlaps(enemy.getBoundingBox()->getInternalRect()))
+    if(collided(hero.getBoundingBox(), enemy.getBoundingBox()))
       break;
 
     //TODO(Chris): Currently updating even when nothing changes.
@@ -69,6 +71,8 @@ int main(int argc, char** argv) {
     if(msToSleep > 0)
       SDL_Delay(msToSleep);
   }
+
+  map.destroyTileImages();
 
   SDL_DestroyWindow(window);
 
@@ -111,19 +115,25 @@ bool spacebarPressed(SDL_Event* event) {
          event->key.keysym.sym == SDLK_SPACE;
 }
 
+bool collided(Rectangle* r1, Rectangle* r2) {
+  return r1->overlaps(r2->getInternalRect());
+}
+
 void update(SDL_Window* window, Map* map, Hero* hero, Enemy* enemy) {
 
   hero->update(map);
-  if(hero->getWeaponBoundingBox()->overlaps(enemy->getBoundingBox()->getInternalRect()))
+  if(collided(hero->getWeaponBoundingBox(), enemy->getBoundingBox()) && hero->isAttacking())
     enemy->notifyHit();
   if(enemy->isAlive())
     enemy->update(map);
+
 }
 
 void drawWorld(SDL_Window* window, Map* map, Hero* hero, Enemy* enemy) {
 
   map->drawTiles();
   map->drawObstructions();
+  map->drawHarvestableTiles();
   
   hero->draw(map);
   if(hero->isAttacking())

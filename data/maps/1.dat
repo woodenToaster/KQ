@@ -175,14 +175,6 @@ tile {
 }
 
 tile {
-  x = 64,
-  y = 64,
-  w = 32,
-  h = 32,
-  image = "grassSurface"
-}
-
-tile {
   x = 96,
   y = 64,
   w = 32,
@@ -638,3 +630,10 @@ obstruction {
   image = "boulder"
 }
 
+harvestableTile {
+  x = 64,
+  y = 64,
+  w = 32,
+  h = 32,
+  image = "gold"
+}

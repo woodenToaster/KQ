@@ -27,6 +27,12 @@ public:
     Rectangle* location;
   };
 
+  struct harvestableTile {
+    SDL_Surface* surface;
+    Rectangle* location;
+    int tileState;
+  };
+
   Map(SDL_Window* window, Hero* hero);
   ~Map();
 
@@ -48,10 +54,17 @@ public:
   void drawObstructions();
   void drawObstruction(obstruction* o);
 
+  void drawHarvestableTiles();
+  void drawHarvestableTile(harvestableTile* h);
+
   void destroyTiles();
   void destroyObstructions();
+  void destroyHarvestableTiles();
+
+  void destroyTileImages();
 
   bool isObstruction(Rectangle* destination);
+  bool isHarvestableTile(Rectangle* destination);
 
   bool upIsObstruction(Rectangle* location);
   bool downIsObstruction(Rectangle* location);
@@ -68,6 +81,7 @@ private:
 
   std::vector<tile> tiles;
   std::vector<obstruction> obstructions;
+  std::vector<harvestableTile> harvestableTiles;
 
   SDL_Surface* mapSurface;
 
