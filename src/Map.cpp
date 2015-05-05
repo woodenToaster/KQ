@@ -12,7 +12,7 @@ std::map<std::string, SDL_Surface*> Map::tileImages = {
   {"gold", SDL_CreateRGBSurface(0, TILE_SIZE * 4, TILE_SIZE * 4, 32, 0, 0, 0, 0)}
 };
 
-Map::Map(SDL_Window* window, Hero* hero): hero(hero) {
+Map::Map(SDL_Window* window, Hero* hero): hero(hero), heroIsHarvesting(false) {
 
   mapSurface = SDL_GetWindowSurface(window);
 }
@@ -145,6 +145,7 @@ bool Map::isObstruction(Rectangle* destination) {
 }
 
 bool Map::isHarvestableTile(Rectangle* destination) {
+  
   for(harvestableTile harvestable : harvestableTiles) {
     int x = destination->getX();
     int y = destination->getY();
@@ -251,12 +252,14 @@ void Map::loadTileDataFromFile(std::string& filename) {
 }
 
 void Map::drawTiles() {
+  
   for(tile t : tiles) {
     drawTile(&t);
   }
 }
 
 void Map::drawTile(tile* t) {
+  
   SDL_FillRect(
     t->surface, 
     t->location->getInternalRect(), 
@@ -284,36 +287,79 @@ void Map::drawHarvestableTiles() {
 
 void Map::drawHarvestableTile(harvestableTile* h) {
   
+  int color;
   switch(h->tileState) {
     case 0:
-      SDL_FillRect(h->surface, NULL, SDL_MapRGB(h->surface->format, 255, 255, 0));
+      color = 255;
       break;
     case 1:
-      SDL_FillRect(h->surface, NULL, SDL_MapRGB(h->surface->format, 230, 230, 0));
+      color = 230;
       break;
     case 2:
-      SDL_FillRect(h->surface, NULL, SDL_MapRGB(h->surface->format, 154, 154, 0));
+      color = 154;
       break;
     default:
       break;
   }
 
+  SDL_FillRect(h->surface, NULL, SDL_MapRGB(h->surface->format, color, color, 0));
   SDL_BlitSurface(h->surface, NULL, mapSurface, h->location->getInternalRect());
 }
 
+void Map::checkHarvesting() {
+  
+  if(hero->isAttacking() && !heroIsHarvesting) {
+    for(auto& harvestable : harvestableTiles) {
+      if(hero->getWeaponBoundingBox()->overlaps(harvestable.location->getInternalRect())) {
+        heroIsHarvesting = true;
+        notifyHarvested(harvestable);
+        break;
+      } 
+    }
+  }
+}
+
+void Map::notifyHarvested(harvestableTile& harvestable) {
+
+  switch(harvestable.tileState) {
+    case 0:
+      incrementHarvestableTileState(harvestable);
+      break;
+    case 1:
+      incrementHarvestableTileState(harvestable);
+      //TODO: Add harvest to hero's inventory
+      break;
+    case 2:
+      break;
+    default:
+      break;
+  }
+}
+
+void Map::notifyDoneHarvesting() {
+  heroIsHarvesting = false;
+}
+
+void Map::incrementHarvestableTileState(harvestableTile& hTile) {
+  hTile.tileState += 1;
+}
+
 void Map::destroyTiles() {
+  
   for(tile t : tiles) {
     delete t.location;
   }
 }
 
 void Map::destroyObstructions() {
+  
   for(obstruction o : obstructions) {
     delete o.location;
   }
 }
 
 void Map::destroyHarvestableTiles() {
+  
   for(harvestableTile h : harvestableTiles) {
     delete h.location;
   }

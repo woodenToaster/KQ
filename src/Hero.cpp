@@ -154,7 +154,7 @@ void Hero::draw(Map* map) {
 
 void Hero::attack(Map* map) {
   attacking = true;
-  SDL_AddTimer(200, doneAttacking, this);
+  SDL_AddTimer(200, doneAttacking, map);
 }
 
 bool Hero::isAttacking() const {
@@ -216,9 +216,12 @@ void Hero::drawSword(Rectangle& dest, Map* map) {
   SDL_BlitSurface(weaponImage, dest.getInternalRect(), map->getMapSurface(), weaponBoundingBox->getInternalRect());
 }
 
-Uint32 Hero::doneAttacking(Uint32 interval, void* heroInstance) {
-  Hero* h = (Hero*) heroInstance;
-  h->attacking = false;
+Uint32 Hero::doneAttacking(Uint32 interval, void* mapInstance) {
+  
+  Map* map = (Map*) mapInstance;
+  Hero* hero = map->getHero();
+  hero->attacking = false;
+  map->notifyDoneHarvesting();
   return 0;
 }
 

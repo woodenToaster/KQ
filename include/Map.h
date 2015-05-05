@@ -10,7 +10,7 @@
 #include "SDL.h"
 
 class Map {
-public:
+ public:
   static const int SCREEN_WIDTH = 320;
   static const int SCREEN_HEIGHT = 240;
   static const int TILE_SIZE = 8;
@@ -57,6 +57,10 @@ public:
   void drawHarvestableTiles();
   void drawHarvestableTile(harvestableTile* h);
 
+  void checkHarvesting();
+  void notifyHarvested(harvestableTile& harvestable);
+  void incrementHarvestableTileState(harvestableTile& hTile);
+
   void destroyTiles();
   void destroyObstructions();
   void destroyHarvestableTiles();
@@ -66,6 +70,8 @@ public:
   bool isObstruction(Rectangle* destination);
   bool isHarvestableTile(Rectangle* destination);
 
+  void notifyDoneHarvesting();
+  
   bool upIsObstruction(Rectangle* location);
   bool downIsObstruction(Rectangle* location);
   bool leftIsObstruction(Rectangle* location);
@@ -76,7 +82,7 @@ public:
   bool downLeftIsObstruction(Rectangle* location);
   bool downRightIsObstruction(Rectangle* location);
 
-private:
+ private:
   static std::map<std::string, SDL_Surface*> tileImages;
 
   std::vector<tile> tiles;
@@ -88,6 +94,8 @@ private:
   //TODO: This is only temporary
   Hero* hero;
 
+  //TODO: Find a better way to do this
+  bool heroIsHarvesting;
 };
 
 #endif

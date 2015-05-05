@@ -40,7 +40,7 @@ class Hero : public GameEntity {
 
   bool isAttacking() const;
 
-  static Uint32 doneAttacking(Uint32 interval, void* heroInstance);
+  static Uint32 doneAttacking(Uint32 interval, void* mapInstance);
 
   Rectangle* getFacingDirection() const;
 
