@@ -82,19 +82,19 @@ bool GameEntity::canMoveDownRight(Map* map) {
 }
 
 bool GameEntity::upIsInMap(Map* map) {
-  return getBBy() > map->getMapSurface()->clip_rect.y;
+  return getBBy() > map->getMapSurfaceUpperBound();
 }
 
 bool GameEntity::downIsInMap(Map* map) {
-  return (getBBy() + getBBh()) < (map->getMapSurface()->clip_rect.y + map->getMapSurface()->clip_rect.h);
+  return (getBBy() + getBBh()) < map->getMapSurfaceLowerBound();
 }
 
 bool GameEntity::leftIsInMap(Map* map) {
-  return getBBx() > map->getMapSurface()->clip_rect.x;
+  return getBBx() > map->getMapSurfaceLeftBound();
 }
 
 bool GameEntity::rightIsInMap(Map* map) {
-  return (getBBx() + getBBw()) < (map->getMapSurface()->clip_rect.x + map->getMapSurface()->clip_rect.w);
+  return (getBBx() + getBBw()) < map->getMapSurfaceRightBound();
 }
 
 bool GameEntity::upLeftIsInMap(Map* map) {

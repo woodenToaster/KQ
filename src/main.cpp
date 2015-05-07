@@ -18,7 +18,7 @@ bool keyPressedIsEscape(SDL_Event* event);
 bool inputDetected();
 
 bool spacebarPressed(SDL_Event* event);
-
+bool heroHitEnemy(Hero* hero, Enemy* enemy);
 bool collided(Rectangle* r1, Rectangle* r2);
 
 void update(SDL_Window* window, Map* map, Hero* hero, Enemy* enemy);
@@ -60,7 +60,7 @@ int main(int argc, char** argv) {
     }
     
     if(collided(hero.getBoundingBox(), enemy.getBoundingBox()))
-      break;
+      quit = true;
 
     //TODO(Chris): Currently updating even when nothing changes.
     //We only want to update when something on the screen has changed.
@@ -111,8 +111,7 @@ bool keyPressedIsEscape(SDL_Event* event) {
 
 bool spacebarPressed(SDL_Event* event) {
 
-  return event->type == SDL_KEYDOWN &&
-         event->key.keysym.sym == SDLK_SPACE;
+  return event->type == SDL_KEYDOWN && event->key.keysym.sym == SDLK_SPACE;
 }
 
 bool collided(Rectangle* r1, Rectangle* r2) {
@@ -122,11 +121,15 @@ bool collided(Rectangle* r1, Rectangle* r2) {
 void update(SDL_Window* window, Map* map, Hero* hero, Enemy* enemy) {
 
   hero->update(map);
-  if(collided(hero->getWeaponBoundingBox(), enemy->getBoundingBox()) && hero->isAttacking())
+  if(heroHitEnemy(hero, enemy) && hero->isAttacking())
     enemy->notifyHit();
   if(enemy->isAlive())
     enemy->update(map);
   
+}
+
+bool heroHitEnemy(Hero* hero, Enemy* enemy) {
+  return collided(hero->getWeaponBoundingBox(), enemy->getBoundingBox());
 }
 
 void drawWorld(SDL_Window* window, Map* map, Hero* hero, Enemy* enemy) {
@@ -139,6 +142,9 @@ void drawWorld(SDL_Window* window, Map* map, Hero* hero, Enemy* enemy) {
   if(hero->isAttacking())
     hero->drawWeapon(map);
   enemy->draw(map);
+  
+  //TODO: This should be in update(), but it has to check after the sword has been drawn
+  // because that's when the sword's bounding box coordinates are updated.
   map->checkHarvesting();
   
   SDL_UpdateWindowSurface(window);

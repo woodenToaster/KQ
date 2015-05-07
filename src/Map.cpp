@@ -38,6 +38,22 @@ SDL_Surface* Map::getMapSurface() {
   return mapSurface;
 }
 
+int Map::getMapSurfaceLowerBound() const {
+  return mapSurface->clip_rect.y + mapSurface->clip_rect.h;
+}
+
+int Map::getMapSurfaceRightBound() const {
+  return mapSurface->clip_rect.x + mapSurface->clip_rect.w;
+}
+
+int Map::getMapSurfaceUpperBound() const {
+  return mapSurface->clip_rect.y;
+}
+
+int Map::getMapSurfaceLeftBound() const {
+  return mapSurface->clip_rect.x;
+}
+
 Hero* Map::getHero() const {
   return hero;
 }
@@ -269,17 +285,20 @@ void Map::drawTile(tile* t) {
 }
 
 void Map::drawObstructions() {
+  
   for(obstruction o : obstructions) {
     drawObstruction(&o);
   }
 }
 
 void Map::drawObstruction(obstruction* o) {
+  
   SDL_FillRect(o->surface, NULL, SDL_MapRGB(o->surface->format, 127, 127, 127));
   SDL_BlitSurface(o->surface, NULL, mapSurface, o->location->getInternalRect());
 }
 
 void Map::drawHarvestableTiles() {
+  
   for(harvestableTile h : harvestableTiles) {
     drawHarvestableTile(&h);
   }

@@ -47,7 +47,8 @@ void Enemy::update(Map* map) {
 }
 
 void Enemy::draw(Map* map) {
-	SDL_BlitSurface(
+	
+  SDL_BlitSurface(
     image,
     locationInSpriteSheet->getInternalRect(), 
     map->getMapSurface(), 

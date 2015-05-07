@@ -40,6 +40,11 @@ class Map {
 
   Hero* getHero() const;
 
+  int getMapSurfaceLowerBound() const;
+  int getMapSurfaceRightBound() const;
+  int getMapSurfaceUpperBound() const;
+  int getMapSurfaceLeftBound() const;
+
   void putHeroOnMap(Hero* hero);
   void putEnemyOnMap(Enemy* enemy);
 
