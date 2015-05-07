@@ -126,7 +126,7 @@ void update(SDL_Window* window, Map* map, Hero* hero, Enemy* enemy) {
     enemy->notifyHit();
   if(enemy->isAlive())
     enemy->update(map);
-  map->checkHarvesting();
+  
 }
 
 void drawWorld(SDL_Window* window, Map* map, Hero* hero, Enemy* enemy) {
@@ -139,7 +139,8 @@ void drawWorld(SDL_Window* window, Map* map, Hero* hero, Enemy* enemy) {
   if(hero->isAttacking())
     hero->drawWeapon(map);
   enemy->draw(map);
-
+  map->checkHarvesting();
+  
   SDL_UpdateWindowSurface(window);
 }
 

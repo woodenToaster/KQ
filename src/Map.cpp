@@ -321,19 +321,8 @@ void Map::checkHarvesting() {
 
 void Map::notifyHarvested(harvestableTile& harvestable) {
 
-  switch(harvestable.tileState) {
-    case 0:
-      incrementHarvestableTileState(harvestable);
-      break;
-    case 1:
-      incrementHarvestableTileState(harvestable);
-      //TODO: Add harvest to hero's inventory
-      break;
-    case 2:
-      break;
-    default:
-      break;
-  }
+  if(harvestable.tileState == 0 || harvestable.tileState == 1)
+    incrementHarvestableTileState(harvestable);
 }
 
 void Map::notifyDoneHarvesting() {
