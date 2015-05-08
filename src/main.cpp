@@ -60,7 +60,7 @@ int main(int argc, char** argv) {
     }
     
     if(collided(hero.getBoundingBox(), enemy.getBoundingBox()))
-      quit = true;
+      hero.notifyCollided(&enemy);
 
     //TODO(Chris): Currently updating even when nothing changes.
     //We only want to update when something on the screen has changed.

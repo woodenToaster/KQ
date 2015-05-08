@@ -30,7 +30,7 @@ const int Hero::direction_values[16] = {
   -1  // down + left + right + up: stop
 };
 
-Hero::Hero(): facing(DOWN), attacking(false) {
+Hero::Hero(): facing(DOWN), attacking(false), recoveringFromHit(false) {
 	
   image = IMG_Load("./data/sprites/walking.tunic.png");
   weaponImage = SDL_CreateRGBSurface(0, 16, 16, 32, 0, 0, 0, 0);
@@ -248,4 +248,24 @@ Rectangle* Hero::getWeaponBoundingBox() const {
 
 Rectangle* Hero::getFacingDirection() const {
   return direction_images[(int)facing];
+}
+
+void Hero::notifyCollided(GameEntity* entity) {
+
+  if(recoveringFromHit)
+    return;
+
+  Enemy* enemy = (Enemy*) entity;
+  enemy->hitHero(this);
+  recoveringFromHit = true;
+  SDL_SetSurfaceAlphaMod(image, 127);
+  SDL_AddTimer(2000, recover, this);
+}
+
+Uint32 Hero::recover(Uint32 interval, void* heroInstance) {
+
+  Hero* hero = (Hero*) heroInstance;
+  hero->recoveringFromHit = false;
+  SDL_SetSurfaceAlphaMod(hero->getImage(), 255);
+  return 0;
 }

@@ -1,6 +1,7 @@
 #include "Enemy.h"
 #include "Map.h"
 #include "SDL_image.h"
+#include <iostream>
 
 Enemy::Enemy(): alive(true) {
 	
@@ -54,6 +55,12 @@ void Enemy::draw(Map* map) {
     map->getMapSurface(), 
     boundingBox->getInternalRect()
   );
+}
+
+void Enemy::hitHero(Hero* hero) {
+  
+  std::cout << "A hit, a very palpable hit.\n";
+  
 }
 
 void Enemy::notifyHit() {

@@ -40,7 +40,11 @@ class Hero : public GameEntity {
 
   bool isAttacking() const;
 
+  //TODO: virtual method on base class?
+  void notifyCollided(GameEntity* entity);
+
   static Uint32 doneAttacking(Uint32 interval, void* mapInstance);
+  static Uint32 recover(Uint32 interval, void* heroInstance);
 
   Rectangle* getFacingDirection() const;
 
@@ -50,6 +54,8 @@ class Hero : public GameEntity {
 
   uint16_t facing;
   bool attacking;
+  bool recoveringFromHit;
+
   Rectangle* direction_images[8];
 
   SDL_Surface* weaponImage;
