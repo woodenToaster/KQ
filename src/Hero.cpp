@@ -33,6 +33,9 @@ const int Hero::direction_values[16] = {
 Hero::Hero(): facing(DOWN), attacking(false), recoveringFromHit(false) {
 	
   image = IMG_Load("./data/sprites/walking.tunic.png");
+  SDL_SetSurfaceBlendMode(image, SDL_BLENDMODE_BLEND);
+  SDL_SetSurfaceAlphaMod(image, 245);
+
   weaponImage = SDL_CreateRGBSurface(0, 16, 16, 32, 0, 0, 0, 0);
   startingLocation = new Rectangle(0, 0, 0, 0);
   locationInSpriteSheet = new Rectangle(4, 137, 16, 22);
@@ -266,6 +269,6 @@ Uint32 Hero::recover(Uint32 interval, void* heroInstance) {
 
   Hero* hero = (Hero*) heroInstance;
   hero->recoveringFromHit = false;
-  SDL_SetSurfaceAlphaMod(hero->getImage(), 255);
+  SDL_SetSurfaceAlphaMod(hero->getImage(), 254);
   return 0;
 }
