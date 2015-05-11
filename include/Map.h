@@ -11,8 +11,8 @@
 
 class Map {
  public:
-  static const int SCREEN_WIDTH = 320;
-  static const int SCREEN_HEIGHT = 240;
+  static const int SCREEN_WIDTH = 640;//320;
+  static const int SCREEN_HEIGHT = 480;//240;
   static const int TILE_SIZE = 8;
   static const int NUM_X_TILES = SCREEN_WIDTH / TILE_SIZE;
   static const int NUM_Y_TILES = SCREEN_HEIGHT / TILE_SIZE;

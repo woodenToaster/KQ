@@ -72,6 +72,8 @@ int main(int argc, char** argv) {
       SDL_Delay(msToSleep);
   }
 
+  SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Hi", "Testing message box.", NULL);
+  
   map.destroyTileImages();
 
   SDL_DestroyWindow(window);
