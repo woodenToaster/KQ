@@ -112,4 +112,3 @@ bool GameEntity::downLeftIsInMap(Map* map) {
 bool GameEntity::downRightIsInMap(Map* map) {
   return downIsInMap(map) && rightIsInMap(map);
 }
-

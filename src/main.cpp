@@ -52,6 +52,9 @@ int main(int argc, char** argv) {
 
   while(!quit) {
     Uint32 start = SDL_GetTicks();
+    
+    if(!hero.isAlive())
+      quit = true;
 
     if(SDL_PollEvent(&event)) {
       quit = shouldClose(&event);
@@ -72,7 +75,7 @@ int main(int argc, char** argv) {
       SDL_Delay(msToSleep);
   }
 
-  SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Hi", "Testing message box.", NULL);
+  //SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Hi", "Testing message box.", NULL);
   
   map.destroyTileImages();
 

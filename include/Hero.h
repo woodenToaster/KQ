@@ -19,9 +19,10 @@ class Hero : public GameEntity {
     LOWER_RIGHT
   };
 
-  void update(Map* map);
+  virtual void update(Map* map);
+  virtual void draw(Map* map);
+
   void updateBoundingBox();
-  void draw(Map* map);
 
   void attack(Map* map);
   void drawWeapon(Map* map);
@@ -39,6 +40,7 @@ class Hero : public GameEntity {
   Rectangle* getWeaponBoundingBox() const;
 
   bool isAttacking() const;
+  bool isAlive() const;
 
   //TODO: virtual method on base class?
   void notifyCollided(GameEntity* entity);
@@ -54,7 +56,8 @@ class Hero : public GameEntity {
 
   uint16_t facing;
   bool attacking;
-  bool recoveringFromHit;
+  bool alive;
+  int life;
 
   Rectangle* direction_images[8];
 

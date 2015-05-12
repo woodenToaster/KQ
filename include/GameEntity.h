@@ -52,6 +52,8 @@ protected:
   Rectangle* startingLocation;
   Rectangle* locationInSpriteSheet;
   Rectangle* boundingBox;
+
+  bool recoveringFromHit;
 };
 
 #endif

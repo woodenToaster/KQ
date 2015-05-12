@@ -9,15 +9,18 @@ class Enemy : public GameEntity {
   Enemy();
   ~Enemy();
 
-  void update(Map* map);
-  void draw(Map* map);
+  virtual void update(Map* map);
+  virtual void draw(Map* map);
 
   void hitHero(Hero* hero);
   void notifyHit();
   bool isAlive() const;
   
+  static Uint32 recover(Uint32 interval, void* enemyInstance);
+
  private:
   bool alive;
+  int life;
 };
 
 #endif

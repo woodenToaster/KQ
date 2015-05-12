@@ -30,11 +30,12 @@ const int Hero::direction_values[16] = {
   -1  // down + left + right + up: stop
 };
 
-Hero::Hero(): facing(DOWN), attacking(false), recoveringFromHit(false) {
+Hero::Hero(): facing(DOWN), attacking(false), alive(true), life(3) {
 	
+  recoveringFromHit = false;
   image = IMG_Load("./data/sprites/walking.tunic.png");
   SDL_SetSurfaceBlendMode(image, SDL_BLENDMODE_BLEND);
-  SDL_SetSurfaceAlphaMod(image, 245);
+  SDL_SetSurfaceAlphaMod(image, 254);
 
   weaponImage = SDL_CreateRGBSurface(0, 16, 16, 32, 0, 0, 0, 0);
   startingLocation = new Rectangle(0, 0, 0, 0);
@@ -94,42 +95,42 @@ void Hero::update(Map* map) {
     switch(direction_value) {
       case 0: // right
         if(canMoveRight(map))
-          setBBx(getBBx() + 1);
+          setBBx(getBBx() + 2);
         break;
       case 1: // right + up
         if(canMoveUpRight(map)) {
-          setBBx(getBBx() + 1);
-          setBBy(getBBy() - 1);
+          setBBx(getBBx() + 2);
+          setBBy(getBBy() - 2);
         }
         break;
       case 2: // up 
         if(canMoveUp(map))
-          setBBy(getBBy() - 1);
+          setBBy(getBBy() - 2);
         break;
       case 3: // left + up
         if(canMoveUpLeft(map)) {
-          setBBx(getBBx() - 1);
-          setBBy(getBBy() - 1);
+          setBBx(getBBx() - 2);
+          setBBy(getBBy() - 2);
         }
         break;
       case 4: // left
         if(canMoveLeft(map)) 
-          setBBx(getBBx() - 1);
+          setBBx(getBBx() - 2);
         break;
       case 5: // down + left
         if(canMoveDownLeft(map)) {
-          setBBx(getBBx() - 1);
-          setBBy(getBBy() + 1);
+          setBBx(getBBx() - 2);
+          setBBy(getBBy() + 2);
         }
         break;
       case 6: // down
         if(canMoveDown(map))
-          setBBy(getBBy() + 1);
+          setBBy(getBBy() + 2);
         break;
       case 7: // down + right
         if(canMoveDownRight(map)) {
-          setBBy(getBBy() + 1);
-          setBBx(getBBx() + 1);
+          setBBy(getBBy() + 2);
+          setBBx(getBBx() + 2);
         }
         break;
       default:
@@ -156,6 +157,10 @@ void Hero::attack(Map* map) {
 
 bool Hero::isAttacking() const {
   return attacking;
+}
+
+bool Hero::isAlive() const {
+  return alive;
 }
 
 void Hero::drawWeapon(Map* map) {
@@ -257,6 +262,9 @@ void Hero::notifyCollided(GameEntity* entity) {
 
   if(recoveringFromHit)
     return;
+
+  if(--life <= 0)
+    alive = false;
 
   Enemy* enemy = (Enemy*) entity;
   enemy->hitHero(this);
