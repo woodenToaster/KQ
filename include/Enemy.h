@@ -16,6 +16,8 @@ class Enemy : public GameEntity {
   void notifyHit();
   bool isAlive() const;
   
+  void decrementLife();
+
   static Uint32 recover(Uint32 interval, void* enemyInstance);
 
  private:

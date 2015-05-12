@@ -45,6 +45,8 @@ class Hero : public GameEntity {
   //TODO: virtual method on base class?
   void notifyCollided(GameEntity* entity);
 
+  void decrementLife();
+  
   static Uint32 doneAttacking(Uint32 interval, void* mapInstance);
   static Uint32 recover(Uint32 interval, void* heroInstance);
 

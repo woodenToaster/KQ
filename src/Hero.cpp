@@ -263,14 +263,20 @@ void Hero::notifyCollided(GameEntity* entity) {
   if(recoveringFromHit)
     return;
 
-  if(--life <= 0)
-    alive = false;
+  decrementLife();
 
   Enemy* enemy = (Enemy*) entity;
   enemy->hitHero(this);
   recoveringFromHit = true;
   SDL_SetSurfaceAlphaMod(image, 127);
   SDL_AddTimer(2000, recover, this);
+}
+
+void Hero::decrementLife() {
+  
+  --life;
+  if(life <= 0)
+    alive = false;
 }
 
 Uint32 Hero::recover(Uint32 interval, void* heroInstance) {

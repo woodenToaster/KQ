@@ -70,13 +70,18 @@ void Enemy::notifyHit() {
   if(recoveringFromHit)
     return;
 
-  if(--life <= 0)
-    alive = false;
+  decrementLife();
 
-  std::cout << "Gotcha!\n";
   recoveringFromHit = true;
   SDL_SetSurfaceAlphaMod(image, 127);
   SDL_AddTimer(2000, recover, this);
+}
+
+void Enemy::decrementLife() {
+  
+  --life;
+  if(life <= 0)
+    alive = false;
 }
 
 bool Enemy::isAlive() const {
