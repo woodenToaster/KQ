@@ -637,3 +637,11 @@ harvestableTile {
   h = 32,
   image = "gold"
 }
+
+harvestableTile {
+  x = 192,
+  y = 64,
+  w = 32,
+  h = 32,
+  image = "gold"
+}

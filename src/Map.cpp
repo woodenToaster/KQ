@@ -323,6 +323,13 @@ void Map::drawHarvestableTile(harvestableTile* h) {
 
   SDL_FillRect(h->surface, NULL, SDL_MapRGB(h->surface->format, color, color, 0));
   SDL_BlitSurface(h->surface, NULL, mapSurface, h->location->getInternalRect());
+
+  if(color == 154)
+    removeHarvestable(h);
+}
+
+void Map::removeHarvestable(harvestableTile* h) {
+  harvestableTiles.resize(std::remove(harvestableTiles.begin(), harvestableTiles.end(), *h) - harvestableTiles.begin());
 }
 
 void Map::checkHarvesting() {
@@ -372,3 +379,4 @@ void Map::destroyHarvestableTiles() {
     delete h.location;
   }
 }
+

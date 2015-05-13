@@ -66,6 +66,8 @@ class Map {
   void notifyHarvested(harvestableTile& harvestable);
   void incrementHarvestableTileState(harvestableTile& hTile);
 
+  void removeHarvestable(harvestableTile* h);
+
   void destroyTiles();
   void destroyObstructions();
   void destroyHarvestableTiles();
@@ -102,5 +104,22 @@ class Map {
   //TODO: Find a better way to do this
   bool heroIsHarvesting;
 };
+
+bool operator==(Map::harvestableTile& h1, Map::harvestableTile& h2) {
+  
+  if(h1.surface != h2.surface)
+    return false;
+
+  if(h1.tileState != h2.tileState)
+    return false;
+
+  if(h1.location->getX() != h2.location->getX() || h1.location->getY() != h2.location->getY())
+    return false;
+
+  if(h1.location->getWidth() != h2.location->getWidth() || h1.location->getHeight() != h2.location->getHeight())
+    return false;
+
+  return true;
+}
 
 #endif
